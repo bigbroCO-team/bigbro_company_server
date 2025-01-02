@@ -1,0 +1,26 @@
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:16
+    restart: always
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=1234
+    ports:
+      - "5432:5432"
+
+  redis:
+    container_name: redis
+    image: redis:6
+    restart: always
+    volumes:
+      - redis:/data
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres:
+  redis:

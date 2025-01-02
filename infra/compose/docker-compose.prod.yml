@@ -1,0 +1,55 @@
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:1.27
+    ports:
+      - "80:80"
+    volumes:
+      - ../nginx:/etc/nginx/conf.d
+    depends_on:
+      - web
+
+  web:
+    container_name: web
+    build:
+      dockerfile: Dockerfile
+      context: ../../
+    env_file:
+      - ../../.env
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings.prod
+    command: [
+      "/bin/sh", "-c",
+      "poetry run python src/manage.py migrate &&
+      poetry run gunicorn --chdir ./src/ --bind 0.0.0.0:8000 --workers 3 --threads 8 core.wsgi:application"
+    ]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    container_name: postgres
+    image: postgres:16
+    restart: always
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+  redis:
+    container_name: redis
+    image: redis:6
+    restart: always
+    volumes:
+      - redis:/data
+
+volumes:
+  postgres:
+  redis:
