@@ -1,55 +1,45 @@
 services:
-  nginx:
-    container_name: nginx
-    image: nginx:1.27
-    ports:
-      - "80:80"
-    volumes:
-      - ../nginx:/etc/nginx/conf.d
-    depends_on:
-      - web
-
-  web:
-    container_name: web
+  stage-web:
+    container_name: stage-web
     build:
       dockerfile: Dockerfile
       context: ../../
     env_file:
-      - ../../.env
+      - ../../.env.stage
     environment:
       - DJANGO_SETTINGS_MODULE=core.settings.stage
     command: [
       "/bin/sh", "-c",
       "poetry run python src/manage.py migrate &&
-      poetry run gunicorn --chdir ./src/ --bind 0.0.0.0:8000 --workers 3 core.wsgi:application"
+      poetry run gunicorn --chdir ./src/ --bind 0.0.0.0:8001 --workers 3 core.wsgi:application"
     ]
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
       interval: 30s
       timeout: 10s
       retries: 3
     depends_on:
-      - postgres
-      - redis
+      - stage-postgres
+      - stage-redis
 
-  postgres:
-    container_name: postgres
+  stage-postgres:
+    container_name: stage-postgres
     image: postgres:16
     restart: always
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - stage-postgres:/data/bigbro/stage/postgres
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
-  redis:
-    container_name: redis
+  stage-redis:
+    container_name: stage-redis
     image: redis:6
     restart: always
     volumes:
-      - redis:/data
+      - stage-redis:/data/bigbro/stage/redis
 
 volumes:
-  postgres:
-  redis:
+  stage-postgres:
+  stage-redis:
