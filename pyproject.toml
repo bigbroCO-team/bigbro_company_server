@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "drf-template"
+name = "bigbro-company-server"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Jueuunn7 <wndmsrla1234@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -13,7 +13,7 @@ psycopg2-binary = "^2.9.10"
 django-redis = "^5.4.0"
 drf-spectacular = "^0.27.2"
 gunicorn = "^23.0.0"
-
+pytest-django = "^4.9.0"
 
 [build-system]
 requires = ["poetry-core"]
