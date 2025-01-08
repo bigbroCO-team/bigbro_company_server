@@ -1,0 +1,45 @@
+services:
+  prod-web:
+    container_name: prod-web
+    build:
+      dockerfile: Dockerfile
+      context: ../../
+    env_file:
+      - ../../.env.prod
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings.prod
+    command: [
+      "/bin/sh", "-c",
+      "poetry run python src/manage.py migrate &&
+      poetry run gunicorn --chdir ./src/ --bind 0.0.0.0:8000 --workers 3 core.wsgi:application"
+    ]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - prod-postgres
+      - prod-redis
+
+  prod-postgres:
+    container_name: prod-postgres
+    image: postgres:16
+    restart: always
+    volumes:
+      - prod-postgres:/data/bigbro/prod/postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+  prod-redis:
+    container_name: prod-redis
+    image: redis:6
+    restart: always
+    volumes:
+      - prod-redis:/data/bigbro/prod/redis
+
+volumes:
+  prod-postgres:
+  prod-redis:
