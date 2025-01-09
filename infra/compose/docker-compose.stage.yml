@@ -21,6 +21,8 @@ services:
     depends_on:
       - stage-postgres
       - stage-redis
+    ports:
+      - "8001:8001"
 
   stage-postgres:
     container_name: stage-postgres

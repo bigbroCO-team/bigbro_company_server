@@ -21,6 +21,8 @@ services:
     depends_on:
       - prod-postgres
       - prod-redis
+    ports:
+      - "8000:8000"
 
   prod-postgres:
     container_name: prod-postgres
