@@ -11,7 +11,7 @@ services:
     command: [
       "/bin/sh", "-c",
       "poetry run python src/manage.py migrate &&
-      poetry run gunicorn --chdir ./src/ --bind 0.0.0.0:8001 --workers 3 core.wsgi:application"
+      poetry run gunicorn --chdir ./src/ --bind 0.0.0.0:8000 --workers 3 core.wsgi:application"
     ]
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
@@ -22,7 +22,7 @@ services:
       - stage-postgres
       - stage-redis
     ports:
-      - "8001:8001"
+      - "8001:8000"
 
   stage-postgres:
     container_name: stage-postgres
