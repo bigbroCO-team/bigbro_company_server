@@ -23,7 +23,7 @@ jobs:
           script: |
             set -e
             cd bigbro_company_server
-            git pull origin main
+            git pull origin develop
             docker-compose -f infra/compose/docker-compose.yml stop stage-web
             docker system prune -af --volumes=false
             docker-compose -f infra/compose/docker-compose.yml up -d --build stage-web
