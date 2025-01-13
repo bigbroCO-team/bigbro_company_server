@@ -33,22 +33,6 @@ services:
       - prod-postgres
       - prod-redis
 
-  prod-postgres:
-    container_name: prod-postgres
-    image: postgres:16
-    restart: always
-    volumes:
-      - prod-postgres:/data/bigbro/prod/postgres
-    env_file:
-      - ../../.env.prod
-
-  prod-redis:
-    container_name: prod-redis
-    image: redis:6
-    restart: always
-    volumes:
-      - prod-redis:/data/bigbro/prod/redis
-
   stage-web:
     container_name: stage-web
     build:
@@ -72,6 +56,22 @@ services:
       - stage-postgres
       - stage-redis
 
+  prod-postgres:
+    container_name: prod-postgres
+    image: postgres:16
+    restart: always
+    volumes:
+      - prod-postgres:/data/bigbro/prod/postgres
+    env_file:
+      - ../../.env.prod
+
+  prod-redis:
+    container_name: prod-redis
+    image: redis:6
+    restart: always
+    volumes:
+      - prod-redis:/data/bigbro/prod/redis
+
   stage-postgres:
     container_name: stage-postgres
     image: postgres:16
@@ -90,6 +90,6 @@ services:
 
 volumes:
   prod-postgres:
-  prod-redis:
   stage-postgres:
+  prod-redis:
   stage-redis:
