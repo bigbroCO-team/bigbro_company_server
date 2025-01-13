@@ -26,4 +26,4 @@ jobs:
             git pull origin main
             docker-compose -f infra/compose/docker-compose.yml stop prod-web
             docker system prune -af --volumes=false
-            docker-compose -f infra/compose/docker-compose.yml up prod-web -d --build
+            docker-compose -f infra/compose/docker-compose.yml up -d --build prod-web

@@ -26,4 +26,4 @@ jobs:
             git pull origin main
             docker-compose -f infra/compose/docker-compose.yml stop stage-web
             docker system prune -af --volumes=false
-            docker-compose -f infra/compose/docker-compose.yml up stage-web -d --build
+            docker-compose -f infra/compose/docker-compose.yml up -d --build stage-web
