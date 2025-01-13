@@ -1,0 +1,95 @@
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:1.27
+    ports:
+      - "80:80"
+    volumes:
+      - ../nginx:/etc/nginx/conf.d
+    depends_on:
+      - stage-web
+      - prod-web
+
+  prod-web:
+    container_name: prod-web
+    build:
+      dockerfile: Dockerfile
+      context: ../../
+    env_file:
+      - ../../.env.prod
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings.prod
+    command: [
+      "/bin/sh", "-c",
+      "poetry run python src/manage.py migrate &&
+      poetry run gunicorn --chdir ./src/ --bind 0.0.0.0:8000 --workers 3 core.wsgi:application"
+    ]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://prod-web:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - prod-postgres
+      - prod-redis
+
+  stage-web:
+    container_name: stage-web
+    build:
+      dockerfile: Dockerfile
+      context: ../../
+    env_file:
+      - ../../.env.stage
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings.stage
+    command: [
+      "/bin/sh", "-c",
+      "poetry run python src/manage.py migrate &&
+      poetry run gunicorn --chdir ./src/ --bind 0.0.0.0:8000 --workers 3 core.wsgi:application"
+    ]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://stage-web:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - stage-postgres
+      - stage-redis
+
+  prod-postgres:
+    container_name: prod-postgres
+    image: postgres:16
+    restart: always
+    volumes:
+      - prod-postgres:/data/bigbro/prod/postgres
+    env_file:
+      - ../../.env.prod
+
+  prod-redis:
+    container_name: prod-redis
+    image: redis:6
+    restart: always
+    volumes:
+      - prod-redis:/data/bigbro/prod/redis
+
+  stage-postgres:
+    container_name: stage-postgres
+    image: postgres:16
+    restart: always
+    volumes:
+      - stage-postgres:/data/bigbro/stage/postgres
+    env_file:
+      - ../../.env.stage
+
+  stage-redis:
+    container_name: stage-redis
+    image: redis:6
+    restart: always
+    volumes:
+      - stage-redis:/data/bigbro/stage/redis
+
+volumes:
+  prod-postgres:
+  stage-postgres:
+  prod-redis:
+  stage-redis:

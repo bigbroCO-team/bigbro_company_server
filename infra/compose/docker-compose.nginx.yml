@@ -1,8 +1,0 @@
-services:
-  nginx:
-    container_name: nginx
-    image: nginx:1.27
-    ports:
-      - "80:80"
-    volumes:
-      - ../nginx:/etc/nginx/conf.d
