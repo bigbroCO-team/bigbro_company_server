@@ -1,9 +1,16 @@
 from django.urls import path
 
-from accounts.views import LoginView, SignupView, LogoutView
+from .views import KakaoLoginView, KakaoLoginCallBackView
+
 
 urlpatterns = [
-    path('/login', LoginView.as_view()),
-    path('/signup', SignupView.as_view(), name='signup'),
-    path('/logout', LogoutView.as_view()),
+    path('/auth/kakao', 
+        KakaoLoginView.as_view(), 
+        name='auth-kakao'
+    ),
+
+    path('/auth/kakao/callback', 
+        KakaoLoginCallBackView.as_view(), 
+        name='auth-kakao-callback'
+    )
 ]

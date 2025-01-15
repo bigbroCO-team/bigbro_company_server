@@ -8,5 +8,11 @@ class User(AbstractUser):
 
         verbose_name = 'User'
 
+    @staticmethod
+    def get_or_create(email: str):
+        if not (user := User.objects.filter(email=email).first()):
+            user = User.objects.create(email=email)
+        return user
+
     def __str__(self):
         return self.username

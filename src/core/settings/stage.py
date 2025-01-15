@@ -9,6 +9,13 @@ DEBUG = os.environ.get("DEBUG") == "True"
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(",")
 
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'core.exceptions.exception_handler',
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+}
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -26,3 +33,6 @@ CACHES = {
         'LOCATION': f'redis://{os.environ.get('REDIS_HOST')}:{os.environ.get('REDIS_PORT')}',
     }
 }
+
+KAKAO_CLIENT_REDIRECT_URL = 'https://bigbro.company/'
+KAKAO_REDIRECT_URI = 'https://stage.api.bigbro.company/account/auth/kakao/callback'
