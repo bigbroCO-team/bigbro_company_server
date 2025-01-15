@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Add-on
     'rest_framework',
-    'drf_spectacular',
     # Apps
     'accounts'
 ]
@@ -56,18 +55,9 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'core.exceptions.exception_handler',
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-    ),
-    'DEFAULT_SCHEMA_CLASS': (
-        'drf_spectacular.openapi.AutoSchema'
-    )
-}
-
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'TITLE',
-    'DESCRIPTION': 'DESCRIPTION',
-    'VERSION': '0.1.0',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
 }
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -146,3 +136,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+KAKAO_API_KEY = 'b3e731ceabc24a35c062b8c8d821b44f'
