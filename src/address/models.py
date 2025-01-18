@@ -11,7 +11,7 @@ class Address(models.Model):
     zipcode = models.CharField(max_length=10)
     address = models.TextField()
     detail = models.CharField(max_length=50)
-    request = models.TextField()
+    request = models.TextField(null=True)
 
     class Meta:
         db_table = 'address'
