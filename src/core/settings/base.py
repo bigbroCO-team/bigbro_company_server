@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     # Add-on
     'rest_framework',
     # Apps
-    'accounts'
+    'accounts',
+    'address'
 ]
 
 MIDDLEWARE = [
