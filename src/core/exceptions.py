@@ -2,7 +2,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.views import exception_handler
 
 
-class BaseCustomException(APIException):
+class BaseCustomException(APIException): 
     status_code = 400
     default_code = "default_code"
     default_detail = "default_detail"
