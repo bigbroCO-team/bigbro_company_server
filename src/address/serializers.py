@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 
 from .models import Address
+from .exceptions import AddressException
 
 
 class AddressSerializer(ModelSerializer):
@@ -14,3 +15,7 @@ class AddressSerializer(ModelSerializer):
         }
 
         
+    def validate_phone(self, value):
+        if not value.isdigit():
+            raise AddressException.phoneNumberIsNotValid
+        return value
