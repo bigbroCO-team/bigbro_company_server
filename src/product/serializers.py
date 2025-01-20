@@ -46,7 +46,7 @@ class ProductWriteSerializer(serializers.ModelSerializer):
             image_list.append(ProductImage(product=product_obj, url=i))
         ProductImage.objects.bulk_create(image_list)
 
-        return validated_data
+        return product_obj
     
     def update(self, instance, validated_data):
         options = validated_data.pop('options')
@@ -64,9 +64,7 @@ class ProductWriteSerializer(serializers.ModelSerializer):
             ProductImage(product=instance, url=url) for url in images
         )
 
-        Product.objects.update(**validated_data)
-
-        return validated_data
+        return Product.objects.update(**validated_data)
     
     def validate_discount(self, value):
         if value < 0 or value > 100:
