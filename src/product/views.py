@@ -24,6 +24,9 @@ class ProductView(APIView):
             serializer = ProductReadSerializer(product, many=True)
         else:
             raise ProductException.invalidQueryException
+        
+        if not product:
+            raise ProductException.productNotFound
 
         return Response(serializer.data, status=HTTP_200_OK)
     
