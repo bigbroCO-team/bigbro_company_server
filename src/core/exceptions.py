@@ -3,10 +3,9 @@ from rest_framework.views import exception_handler
 
 
 class BaseCustomException(APIException): 
-    status_code = 400
-    default_code = "default_code"
-    default_detail = "default_detail"
-
+    def __init__(self, code, detail):
+        self.status_code = code
+        self.detail = detail
 
 def custom_exception_handler(exception, context):
     response = exception_handler(exception, context)
