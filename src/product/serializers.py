@@ -2,6 +2,7 @@ from django.db.models import QuerySet
 from rest_framework import serializers
 
 from .models import Product, ProductOption, ProductImage
+from .exceptions import ProductException
 
 
 class ProductReadSerializer(serializers.ModelSerializer):
@@ -66,3 +67,8 @@ class ProductWriteSerializer(serializers.ModelSerializer):
         Product.objects.update(**validated_data)
 
         return validated_data
+    
+    def validate_discount(self, value):
+        if value < 0 or value > 100:
+            raise ProductException.invalidDiscount
+        return value

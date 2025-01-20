@@ -39,7 +39,7 @@ class ProductView(APIView):
     def put(self, request: Request, product_id: int) -> Response:
         product = Product.objects.filter(id=product_id).prefetch_related('images', 'options').first()
         if not product:
-            raise ProductException.ProductNotFound
+            raise ProductException.productNotFound
         serializer = ProductWriteSerializer(product, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -49,6 +49,6 @@ class ProductView(APIView):
     def delete(self, request: Request, product_id: int) -> Response:
         product = Product.objects.filter(id=product_id).first()
         if not product:
-            raise ProductException.ProductNotFound
+            raise ProductException.productNotFound
         product.delete()
         return Response(status=HTTP_204_NO_CONTENT)
