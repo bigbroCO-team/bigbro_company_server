@@ -12,6 +12,7 @@ class Cart(models.Model):
 
     class Meta:
         db_table = 'cart'
+        unique_together = ['user', 'product', 'option']
 
     def __str__(self):
         return str(self.id)
