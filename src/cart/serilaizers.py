@@ -46,7 +46,7 @@ class CartWriteSerializer(serializers.ModelSerializer):
         cart = Cart.objects.filter(
             user=validated_data['user'], 
             product=validated_data['product'], 
-            option=option_obj.id
+            option=option_obj
         ).first()
         # 기존 cart가 있다면
         if cart:

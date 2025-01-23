@@ -25,7 +25,7 @@ class CartView(APIView):
         serializer = CartWriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(user=request.user)
-        return Response(serializer.data, status=HTTP_200_OK)
+        return Response(status=HTTP_200_OK)
     
     @transaction.atomic
     def delete(self, request: Request, cart_id: int) -> Response:
