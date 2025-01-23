@@ -1,4 +1,3 @@
-from django.db.models import QuerySet
 from rest_framework import serializers
 
 from .models import Product, ProductOption, ProductImage
@@ -59,7 +58,7 @@ class ProductWriteSerializer(serializers.ModelSerializer):
         )
 
         # Image 업데이트
-        instance.images.all().update()
+        instance.images.all().delete()
         ProductImage.objects.bulk_create(
             ProductImage(product=instance, url=url) for url in images
         )
@@ -70,3 +69,13 @@ class ProductWriteSerializer(serializers.ModelSerializer):
         if value < 0 or value > 100:
             raise ProductException.invalidDiscount
         return value
+    
+
+class ProductOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductOption
+        fields = '__all__'
+        extra_kwargs = {
+            'id': {'read_only': True},
+            'product': {'required': False, 'write_only': True}
+        }
