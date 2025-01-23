@@ -58,7 +58,7 @@ class ProductWriteSerializer(serializers.ModelSerializer):
         )
 
         # Image 업데이트
-        instance.images.all().update()
+        instance.images.all().delete()
         ProductImage.objects.bulk_create(
             ProductImage(product=instance, url=url) for url in images
         )
