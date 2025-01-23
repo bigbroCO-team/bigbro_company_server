@@ -4,6 +4,7 @@ from .models import Cart
 from product.models import ProductOption
 from product.serializers import ProductReadSerializer, ProductOptionSerializer
 from product.exceptions import ProductException
+from .exceptions import CartExceptions
 
 
 class CartReadSerializer(serializers.ModelSerializer):
@@ -54,3 +55,8 @@ class CartWriteSerializer(serializers.ModelSerializer):
             return cart
         
         return Cart.objects.create(**validated_data, option=option_obj)
+
+    def validate_count(self, value):
+        if value < 1:
+            raise CartExceptions.countIsNotAvailable
+        return value
