@@ -1,8 +1,8 @@
 import requests
 
 from django.conf import settings
-from django.contrib.auth import login
-from rest_framework.permissions import AllowAny
+from django.contrib.auth import login, logout
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.request import Request
@@ -28,6 +28,15 @@ class KakaoLoginView(APIView):
         return Response(headers=headers, status=status.HTTP_302_FOUND)
     
 
+class LogoutView(APIView):
+    authentication_classes = [CsrfExemptSessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request: Request) -> Response:
+        logout(request)
+        return Response(status=status.HTTP_200_OK)
+
+
 class KakaoLoginCallBackView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [AllowAny]
@@ -42,6 +51,7 @@ class KakaoLoginCallBackView(APIView):
                 'client_id': settings.KAKAO_API_KEY,
                 'redirect_uri': settings.KAKAO_REDIRECT_URI,
                 'code': request.GET.get('code'),
+                'client_secret': settings.KAKAO_CLIENT_SECRET
             }
         )
         if not access_token_response.status_code == 200:
