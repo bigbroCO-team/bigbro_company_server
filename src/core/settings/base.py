@@ -141,3 +141,4 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 KAKAO_API_KEY = 'b3e731ceabc24a35c062b8c8d821b44f'
+KAKAO_CLIENT_SECRET = os.environ.get('KAKAO_CLIENT_SECRET')
