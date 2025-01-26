@@ -17,18 +17,6 @@ services:
       context: ../../
     env_file:
       - ../../.env.prod
-    environment:
-      - DJANGO_SETTINGS_MODULE=core.settings.prod
-    command: [
-      "/bin/sh", "-c",
-      "poetry run python src/manage.py migrate &&
-      poetry run gunicorn --chdir ./src/ --bind 0.0.0.0:8000 --workers 3 core.wsgi:application"
-    ]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://prod-web:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     depends_on:
       - prod-postgres
       - prod-redis
@@ -40,18 +28,6 @@ services:
       context: ../../
     env_file:
       - ../../.env.stage
-    environment:
-      - DJANGO_SETTINGS_MODULE=core.settings.stage
-    command: [
-      "/bin/sh", "-c",
-      "poetry run python src/manage.py migrate &&
-      poetry run gunicorn --chdir ./src/ --bind 0.0.0.0:8000 --workers 3 core.wsgi:application"
-    ]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://stage-web:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     depends_on:
       - stage-postgres
       - stage-redis
