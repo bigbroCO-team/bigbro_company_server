@@ -7,65 +7,35 @@ services:
     volumes:
       - ../nginx:/etc/nginx/conf.d
     depends_on:
-      - stage-web
-      - prod-web
+      - web
 
-  prod-web:
-    container_name: prod-web
+  web:
+    container_name: web
     build:
       dockerfile: Dockerfile
       context: ../../
     env_file:
-      - ../../.env.prod
+      - ../../.env
     depends_on:
-      - prod-postgres
-      - prod-redis
+      - postgres
+      - redis
 
-  stage-web:
-    container_name: stage-web
-    build:
-      dockerfile: Dockerfile
-      context: ../../
-    env_file:
-      - ../../.env.stage
-    depends_on:
-      - stage-postgres
-      - stage-redis
-
-  prod-postgres:
-    container_name: prod-postgres
+  postgres:
+    container_name: postgres
     image: postgres:16
     restart: always
     volumes:
-      - prod-postgres:/data/bigbro/prod/postgres
+      - postgres:/data/bigbro/postgres
     env_file:
-      - ../../.env.prod
+      - ../../.env
 
-  prod-redis:
-    container_name: prod-redis
+  redis:
+    container_name: redis
     image: redis:6
     restart: always
     volumes:
-      - prod-redis:/data/bigbro/prod/redis
-
-  stage-postgres:
-    container_name: stage-postgres
-    image: postgres:16
-    restart: always
-    volumes:
-      - stage-postgres:/data/bigbro/stage/postgres
-    env_file:
-      - ../../.env.stage
-
-  stage-redis:
-    container_name: stage-redis
-    image: redis:6
-    restart: always
-    volumes:
-      - stage-redis:/data/bigbro/stage/redis
+      - redis:/data/bigbro/redis
 
 volumes:
-  prod-postgres:
-  stage-postgres:
-  prod-redis:
-  stage-redis:
+  postgres:
+  redis:
