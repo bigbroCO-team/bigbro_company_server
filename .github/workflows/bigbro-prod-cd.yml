@@ -16,14 +16,12 @@ jobs:
       - name: Deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SSH_HOST }}
-          port: ${{ secrets.SSH_PORT }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ secrets.SSH_HOST_PROD }}
+          port: ${{ secrets.SSH_PORT_PROD }}
+          username: ${{ secrets.SSH_USERNAME_PROD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_PROD }}
           script: |
             set -e
             cd bigbro_company_server
             git pull origin main
-            docker-compose -f infra/compose/docker-compose.yml stop prod-web
-            docker system prune -af --volumes=false
-            docker-compose -f infra/compose/docker-compose.yml up -d --build prod-web
+            ./deploy.sh
