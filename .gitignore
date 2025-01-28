@@ -382,10 +382,7 @@ pyrightconfig.json
 
 poetry.lock
 
+.env
 .env.local
 .env.stage
 .env.prod
-
-.env.prod
-.env.*
-!.env.example.*

@@ -6,90 +6,47 @@ services:
       - "80:80"
     volumes:
       - ../nginx:/etc/nginx/conf.d
-    depends_on:
-      - stage-web
-      - prod-web
 
-  prod-web:
-    container_name: prod-web
+  web-blue:
+    container_name: web-blue
     build:
       dockerfile: Dockerfile
       context: ../../
     env_file:
-      - ../../.env.prod
-    environment:
-      - DJANGO_SETTINGS_MODULE=core.settings.prod
-    command: [
-      "/bin/sh", "-c",
-      "poetry run python src/manage.py migrate &&
-      poetry run gunicorn --chdir ./src/ --bind 0.0.0.0:8000 --workers 3 core.wsgi:application"
-    ]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://prod-web:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      - ../../.env
     depends_on:
-      - prod-postgres
-      - prod-redis
+      - postgres
+      - redis
+      - nginx
 
-  stage-web:
-    container_name: stage-web
+  web-green:
+    container_name: web-green
     build:
       dockerfile: Dockerfile
       context: ../../
     env_file:
-      - ../../.env.stage
-    environment:
-      - DJANGO_SETTINGS_MODULE=core.settings.stage
-    command: [
-      "/bin/sh", "-c",
-      "poetry run python src/manage.py migrate &&
-      poetry run gunicorn --chdir ./src/ --bind 0.0.0.0:8000 --workers 3 core.wsgi:application"
-    ]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://stage-web:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      - ../../.env
     depends_on:
-      - stage-postgres
-      - stage-redis
+      - postgres
+      - redis
+      - nginx
 
-  prod-postgres:
-    container_name: prod-postgres
+  postgres:
+    container_name: postgres
     image: postgres:16
     restart: always
     volumes:
-      - prod-postgres:/data/bigbro/prod/postgres
+      - postgres:/data/bigbro/postgres
     env_file:
-      - ../../.env.prod
+      - ../../.env
 
-  prod-redis:
-    container_name: prod-redis
+  redis:
+    container_name: redis
     image: redis:6
     restart: always
     volumes:
-      - prod-redis:/data/bigbro/prod/redis
-
-  stage-postgres:
-    container_name: stage-postgres
-    image: postgres:16
-    restart: always
-    volumes:
-      - stage-postgres:/data/bigbro/stage/postgres
-    env_file:
-      - ../../.env.stage
-
-  stage-redis:
-    container_name: stage-redis
-    image: redis:6
-    restart: always
-    volumes:
-      - stage-redis:/data/bigbro/stage/redis
+      - redis:/data/bigbro/redis
 
 volumes:
-  prod-postgres:
-  stage-postgres:
-  prod-redis:
-  stage-redis:
+  postgres:
+  redis:
