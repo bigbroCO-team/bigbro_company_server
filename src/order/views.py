@@ -23,7 +23,7 @@ class OrderView(APIView):
     @pgtransaction.atomic(isolation_level=pgtransaction.SERIALIZABLE)
     def post(self, request: Request) -> Response:
         serializer = OrderWriteSerializer(data=request.data)
-        serializer.is_valid()
+        serializer.is_valid(raise_exception=True)
         serializer.save(user=request.user)
         return Response(status=HTTP_201_CREATED)
     
