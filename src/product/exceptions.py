@@ -7,3 +7,7 @@ class ProductException:
     invalidDiscount = BaseCustomException(code=400, detail='Invalid Discount.')
     optionNotFound = BaseCustomException(code=404, detail='Options Not Found.')
     productIsNotOnSale = BaseCustomException(code=400, detail='Product is not on sale')
+
+
+class ProductOptionException:
+    optionNotFound = BaseCustomException(code=404, detail='Option Not Found.')

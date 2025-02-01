@@ -3,6 +3,8 @@ from rest_framework import serializers
 from .models import Order, OrderItem
 from product.models import Product, ProductOption
 from address.models import Address
+from product.exceptions import ProductException, ProductOptionException
+from address.exceptions import AddressException
 
 
 class OrderReadSerializer(serializers.ModelSerializer):
@@ -14,6 +16,7 @@ class OrderReadSerializer(serializers.ModelSerializer):
 class OrderWriteSerializer(serializers.Serializer):
     products = serializers.ListField()
     address = serializers.IntegerField()
+    quantity = serializers.IntegerField()
 
     def create(self, validated_data):
         products = validated_data.pop('products')
@@ -22,7 +25,7 @@ class OrderWriteSerializer(serializers.Serializer):
         # Get address
         address = Address.objects.filter(id=validated_data['address']).first()
         if not address:
-            raise serializers.ValidationError('Address not found')
+            raise AddressException.addressNotFound
         
         # Create order 
         order = Order.objects.create(
@@ -39,15 +42,16 @@ class OrderWriteSerializer(serializers.Serializer):
         for p in products:
             product = Product.objects.filter(id=p['product']).first()
             if not product:
-                raise serializers.ValidationError('Product not found')
+                raise ProductException.productNotFound
             
             option = ProductOption.objects.filter(id=p['option']).first()
             if not option:
-                raise serializers.ValidationError('Option not found')
+                raise ProductOptionException.optionNotFound
             
-            total_price += product.price * product.discount
+            total_price += (product.price - int(product.price * product.discount / 100)) * p['quantity']
 
             order_items.append(OrderItem(product=product, product_option=option, order=order))
+
         OrderItem.objects.bulk_create(order_items)
 
         order.total_price = total_price
