@@ -13,10 +13,15 @@ class OrderReadSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class OrderWriteSerializer(serializers.Serializer):
+class ProductItemSerializer(serializers.Serializer):
     products = serializers.ListField()
     address = serializers.IntegerField()
     quantity = serializers.IntegerField()
+
+
+class OrderWriteSerializer(serializers.Serializer):
+    products = ProductItemSerializer(many=True)
+    address = serializers.IntegerField()
 
     def create(self, validated_data):
         products = validated_data.pop('products')
