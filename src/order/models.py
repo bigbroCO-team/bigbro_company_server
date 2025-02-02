@@ -18,6 +18,7 @@ class Order(models.Model):
     request = models.TextField(null=True)
     phone = models.CharField(max_length=11)
 
+    # TODO: PG사 결제 연동 시 필요한 필드
 #   paymentkey = models.CharField()
 #   orderid = models.CharField()
 
