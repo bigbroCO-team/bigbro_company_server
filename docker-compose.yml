@@ -1,0 +1,26 @@
+services:
+  bigbro-postgres:
+    container_name: bigbro-postgres
+    image: postgres:16
+    restart: always
+    volumes:
+      - bigbro-postgres:/data
+    environment:
+      - POSTGRES_DB=bigbro
+      - POSTGRES_USER=bigbro
+      - POSTGRES_PASSWORD=bigbro
+    ports:
+      - "5432:5432"
+
+  bigbro-redis:
+    container_name: bigbro-redis
+    image: redis:6
+    restart: always
+    volumes:
+      - bigbro-redis:/data
+    ports:
+      - "6379:6379"
+
+volumes:
+  bigbro-postgres:
+  bigbro-redis:
