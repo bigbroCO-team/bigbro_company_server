@@ -5,6 +5,8 @@ from fastapi import FastAPI
 
 from db import create_db
 
+from src.auth.presentation.controller.auth import router as auth_router
+
 app = FastAPI()
 
 
@@ -13,10 +15,12 @@ async def root():
     return 'GOGO Minigame Service OK'
 
 
+app.include_router(auth_router)
+
 if __name__ == '__main__':
     try:
         asyncio.run(create_db())
-        uvicorn.run(app, host='0.0.0.0', port=8086)
+        uvicorn.run(app, host='0.0.0.0', port=8000)
     except Exception as e:
         print(e)
         exit(1)
