@@ -7,15 +7,11 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.13"
-django = "^5.1.5"
-djangorestframework = "^3.15.2"
-psycopg2-binary = "^2.9.10"
-django-redis = "^5.4.0"
-gunicorn = "^23.0.0"
-pytest-django = "^4.9.0"
-requests = "^2.32.3"
-django-pgtransaction = "^1.5.2"
-
+fastapi = {extras = ["standard"], version = "^0.115.8"}
+sqlmodel = "^0.0.22"
+python-dotenv = "^1.0.1"
+asyncpg = "^0.30.0"
+greenlet = "^3.1.1"
 
 [build-system]
 requires = ["poetry-core"]
