@@ -1,5 +1,5 @@
 import httpx
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Request
 from fastapi.responses import RedirectResponse
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -24,7 +24,7 @@ class AuthServiceImpl(AuthService):
         )
         return RedirectResponse(url=location)
 
-    async def kakao_auth_callback(self, code):
+    async def kakao_auth_callback(self, code, request: Request):
         async with self.session.begin():
             access_token_res = await httpx.AsyncClient().post(
                 url='https://kauth.kakao.com/oauth/token',
@@ -55,5 +55,7 @@ class AuthServiceImpl(AuthService):
                         email=user_email
                     )
                 )
+
+            request.session['email'] = user_email
 
             return RedirectResponse(status_code=status.HTTP_302_FOUND, url='/')

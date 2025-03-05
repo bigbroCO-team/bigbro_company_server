@@ -2,6 +2,7 @@ import asyncio
 
 import uvicorn
 from fastapi import FastAPI
+from starlette.middleware.sessions import SessionMiddleware
 
 from db import create_db
 
@@ -15,7 +16,9 @@ async def root():
     return 'GOGO Minigame Service OK'
 
 
+app.add_middleware(SessionMiddleware, secret_key='secret')
 app.include_router(auth_router)
+
 
 if __name__ == '__main__':
     try:

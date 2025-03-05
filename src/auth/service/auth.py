@@ -6,4 +6,4 @@ class AuthService(ABC):
     async def kakao_auth(self): pass
 
     @abstractmethod
-    async def kakao_auth_callback(self, code): pass
+    async def kakao_auth_callback(self, code, reqeust): pass
