@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv(f'.env.{os.environ.get('env')}')
 
+SESSION_SECRET_KEY = os.environ.get('SESSION_SECRET_KEY')
 
 DB_HOST = os.environ.get('DB_HOST')
 DB_NAME = os.environ.get('DB_NAME')
