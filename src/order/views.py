@@ -1,4 +1,3 @@
-import pgtransaction
 from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -20,7 +19,7 @@ class OrderView(APIView):
         serializer = OrderReadSerializer(order, many=True)
         return Response(serializer.data, status=HTTP_200_OK)
     
-    @pgtransaction.atomic(isolation_level=pgtransaction.SERIALIZABLE)
+    @transaction.atomic
     def post(self, request: Request) -> Response:
         serializer = OrderWriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
