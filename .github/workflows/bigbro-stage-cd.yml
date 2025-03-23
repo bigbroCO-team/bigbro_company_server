@@ -1,4 +1,4 @@
-name: Bigbro Stage CD Workflow
+name: Deploy to EC2
 
 on:
   push:
@@ -10,18 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Deploy
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          host: ${{ secrets.SSH_HOST_STAGE }}
-          port: ${{ secrets.SSH_PORT_STAGE }}
-          username: ${{ secrets.SSH_USERNAME_STAGE }}
-          key: ${{ secrets.SSH_PRIVATE_KEY_STAGE }}
-          script: |
-            set -e
-            cd bigbro_company_server
-            git pull origin develop
-            ./deploy.sh
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Deploy with AWS CodeDeploy
+        run: |
+          aws deploy create-deployment \
+            --application-name bigbro-stage \
+            --deployment-group-name bigbro-stage \
+            --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
