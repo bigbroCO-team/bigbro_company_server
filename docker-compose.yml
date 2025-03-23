@@ -8,6 +8,8 @@ services:
       - ./nginx:/etc/nginx/
     networks:
       - bigbro-network
+    depends_on:
+      - bigbro-application
 
   bigbro-application:
     container_name: bigbro-application
@@ -18,6 +20,9 @@ services:
       - ~/.env
     networks:
       - bigbro-network
+    depends_on:
+      - bigbro-postgres
+      - bigbro-redis
 
   bigbro-postgres:
     container_name: bigbro-postgres
