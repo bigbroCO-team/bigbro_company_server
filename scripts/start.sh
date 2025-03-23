@@ -1,5 +1,11 @@
 #!/bin/sh
 
-cd  ~/bigbro_company_server/src/
-poetry install
-poetry run gunicorn --chdir ~/bigbro_company_server/src/ --bind 0.0.0.0:8000 --workers 3 core.wsgi:application
+cd ~/bigbro_company_server
+
+docker build -t bigbro .
+
+docker stop bigbro || true
+
+docker rm bigbro || true
+
+docker run -d -p 80:80 --name bigbro --env-file ~/.env bigbro
