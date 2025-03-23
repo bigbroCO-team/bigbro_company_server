@@ -23,6 +23,8 @@ services:
     depends_on:
       - bigbro-postgres
       - bigbro-redis
+    ports:
+      - "8000:8000"
 
   bigbro-postgres:
     container_name: bigbro-postgres
