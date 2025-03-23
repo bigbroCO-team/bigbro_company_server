@@ -13,11 +13,7 @@ services:
       dockerfile: Dockerfile
       context: ../../
     env_file:
-      - .env
-    depends_on:
-      - postgres
-      - redis
-      - nginx
+      - ../../.env
 
   web-green:
     container_name: web-green
@@ -25,28 +21,4 @@ services:
       dockerfile: Dockerfile
       context: ../../
     env_file:
-      - .env
-    depends_on:
-      - postgres
-      - redis
-      - nginx
-
-  postgres:
-    container_name: postgres
-    image: postgres:16
-    restart: always
-    volumes:
-      - postgres:/data/bigbro/postgres
-    env_file:
-      - .env
-
-  redis:
-    container_name: redis
-    image: redis:6
-    restart: always
-    volumes:
-      - redis:/data/bigbro/redis
-
-volumes:
-  postgres:
-  redis:
+      - ../../.env
