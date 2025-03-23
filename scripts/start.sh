@@ -1,5 +1,7 @@
 #!/bin/sh
 
+pwd
+
 IS_BLUE=$(docker ps | grep blue)
 
 # Blue-green 배포
