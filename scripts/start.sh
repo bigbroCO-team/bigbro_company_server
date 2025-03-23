@@ -10,12 +10,7 @@ else
   git pull origin develop
 fi
 
-docker build -t bigbro .
+docker-compsose up --build -d
 
-docker stop bigbro || true
-
-docker rm bigbro || true
-
-docker run -d -p 80:80 --name bigbro --env-file ~/.env bigbro
-
-docker exec bigbro poetry run python /app/src/manage.py migrate
+docker container prune -f
+docker image prune -a -f
