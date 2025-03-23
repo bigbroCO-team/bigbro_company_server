@@ -1,7 +1,7 @@
 services:
   bigbro-nginx:
     container_name: bigbro-nginx
-    image: nginx:lastest
+    image: nginx:latest
     ports:
       - "80:80"
     volumes:
