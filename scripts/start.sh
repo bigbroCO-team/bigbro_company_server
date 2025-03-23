@@ -10,7 +10,7 @@ else
   git pull origin develop
 fi
 
-docker-compsose up --build -d
+docker-compose up --build -d
 
 docker container prune -f
 docker image prune -a -f
