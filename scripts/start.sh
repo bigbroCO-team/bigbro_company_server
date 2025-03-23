@@ -6,11 +6,11 @@ IS_BLUE=$(docker ps | grep blue)
 if [ -z "$IS_BLUE" ]; then
     echo "Deploying blue"
 
-    docker-compose -f infra/compose/docker-compose.yml --env-file .env up --build -d web-blue
+    docker-compose -f infra/compose/docker-compose.yml up --build -d web-blue
     docker stop web-green
 else
     echo "Deploying green"
-    docker-compose -f infra/compose/docker-compose.yml --env-file .env up --build -d web-green
+    docker-compose -f infra/compose/docker-compose.yml up --build -d web-green
     docker stop web-blue
 fi
 
@@ -22,14 +22,14 @@ if curl http://localhost:80/health-check | grep 502; then
     if [ -z "$IS_BLUE" ]; then
         echo "Rolling back to blue"
 
-        docker-compose -f infra/compose/docker-compose.yml --env-file .env up -d web-green
+        docker-compose -f infra/compose/docker-compose.yml up -d web-green
         docker stop web-blue
         docker system prune -af --volumes=false
         exit 1
     else
         echo "Rolling back to green"
 
-        docker-compose -f infra/compose/docker-compose.yml --env-file .env up -d web-blue
+        docker-compose -f infra/compose/docker-compose.yml up -d web-blue
         docker stop web-green
         docker system prune -af --volumes=false
         exit 1
