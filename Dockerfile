@@ -14,8 +14,5 @@ CMD [
     "poetry", "run", "gunicorn",
     "--chdir", "./src/",
     "-b", "0.0.0.0:8000",
-    "core.wsgi:application",
-    "--access-logfile", "-",
-    "--error-logfile", "-",
-    "--log-level", "info"
+    "core.wsgi:application"
 ]
