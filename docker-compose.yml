@@ -5,7 +5,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx:/etc/nginx/
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks:
       - bigbro-network
     depends_on:
