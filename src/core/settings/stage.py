@@ -35,7 +35,7 @@ CACHES = {
 }
 
 KAKAO_CLIENT_REDIRECT_URL = 'https://stage.bigbro.company/main'
-KAKAO_REDIRECT_URI = 'http://stage.api.bigbro.company/account/auth/kakao/callback'
+KAKAO_REDIRECT_URI = 'http://ec2-3-39-233-10.ap-northeast-2.compute.amazonaws.com:8000/account/auth/kakao/callback'
 
 
 import sentry_sdk
