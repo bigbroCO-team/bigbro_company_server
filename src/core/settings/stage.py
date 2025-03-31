@@ -34,5 +34,5 @@ CACHES = {
     }
 }
 
-KAKAO_CLIENT_REDIRECT_URL = 'https://bigbro.company/'
+KAKAO_CLIENT_REDIRECT_URL = 'https://stage.bigbro.company/main'
 KAKAO_REDIRECT_URI = 'https://stage.api.bigbro.company/account/auth/kakao/callback'
