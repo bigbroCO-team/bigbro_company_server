@@ -10,4 +10,12 @@ RUN poetry install --no-root
 
 EXPOSE 8000
 
-CMD [ "poetry", "run", "gunicorn", "--chdir", "./src/",  "-b", "0.0.0.0:8000", "core.wsgi:application" ]
+CMD [
+    "poetry", "run", "gunicorn",
+    "--chdir", "./src/",
+    "-b", "0.0.0.0:8000",
+    "core.wsgi:application",
+    "--access-logfile", "-",
+    "--error-logfile", "-",
+    "--log-level", "info"
+]
