@@ -6,9 +6,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT
 
 from core.authentication import CsrfExemptSessionAuthentication
+from .exceptions import AddressNotFoundException
 from .models import Address
 from .serializers import AddressSerializer
-from .exceptions import AddressException
 
 
 class AddressView(APIView):
@@ -24,14 +24,14 @@ class AddressView(APIView):
     def post(self, request: Request) -> Response:
         serializer = AddressSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(user_id=request.user)
+        serializer.save(user=request.user)
         return Response(status=HTTP_201_CREATED)
     
     @transaction.atomic
     def put(self, request: Request, address_id: int) -> Response:
-        address = Address.objects.filter(id=address_id, user_id=request.user).first()
+        address = Address.objects.filter(id=address_id, user=request.user).first()
         if not address:
-            raise AddressException.addressNotFound
+            raise AddressNotFoundException()
         serializer =  AddressSerializer(address, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -41,6 +41,6 @@ class AddressView(APIView):
     def delete(self, request: Request, address_id: int) -> Response:
         address = Address.objects.filter(id=address_id, user_id=request.user).first()
         if not address:
-            raise AddressException.addressNotFound
+            raise AddressNotFoundException()
         address.delete()
         return Response(status=HTTP_204_NO_CONTENT)

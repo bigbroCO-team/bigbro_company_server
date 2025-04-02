@@ -1,21 +1,15 @@
 from rest_framework.serializers import ModelSerializer
 
+from .exceptions import PhoneNumberIsNotValidException
 from .models import Address
-from .exceptions import AddressException
 
 
 class AddressSerializer(ModelSerializer):
     class Meta:
         model = Address
-        fields = '__all__'
+        fields = ('id', 'name', 'zipcode', 'phone', 'address', 'detail')
 
-        extra_kwargs = {
-            'id': {'read_only': True},
-            'user_id': {'required': False, 'write_only': True}
-        }
-
-        
     def validate_phone(self, value):
         if not value.isdigit():
-            raise AddressException.phoneNumberIsNotValid
+            raise PhoneNumberIsNotValidException()
         return value
