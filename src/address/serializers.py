@@ -1,3 +1,5 @@
+import re
+
 from rest_framework.serializers import ModelSerializer
 
 from .exceptions import PhoneNumberIsNotValidException
@@ -10,6 +12,6 @@ class AddressSerializer(ModelSerializer):
         fields = ('id', 'name', 'zipcode', 'phone', 'address', 'detail')
 
     def validate_phone(self, value):
-        if not value.isdigit():
+        if not re.fullmatch(r'^\d{10,11}$', value):
             raise PhoneNumberIsNotValidException()
         return value
