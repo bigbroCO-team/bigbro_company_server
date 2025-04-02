@@ -13,7 +13,6 @@ fi
 docker build . -t bigbro-application
 
 docker stop bigbro-application  || true
-
 docker rm bigbro-application || true
 
-docker run -d --name bigbro-application --env-file ~/.env bigbro-application
+docker run -d --name bigbro-application --env-file ~/.env -p 8000:8000 bigbro-application
