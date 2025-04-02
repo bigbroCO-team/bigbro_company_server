@@ -4,7 +4,6 @@ from .models import Order, OrderItem
 from product.models import Product, ProductOption
 from address.models import Address
 from product.exceptions import ProductException, ProductOptionException
-from address.exceptions import AddressException
 
 
 class OrderReadSerializer(serializers.ModelSerializer):
