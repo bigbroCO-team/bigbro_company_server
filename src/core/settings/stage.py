@@ -34,9 +34,8 @@ CACHES = {
     }
 }
 
-KAKAO_CLIENT_REDIRECT_URL = 'https://stage.bigbro.company/main'
-KAKAO_REDIRECT_URI = 'http://ec2-3-39-233-10.ap-northeast-2.compute.amazonaws.com:8000/account/auth/kakao/callback'
-
+KAKAO_CLIENT_REDIRECT_URL = os.environ.get('KAKAO_CLIENT_REDIRECT_URL')
+KAKAO_REDIRECT_URI = os.environ.get('KAKAO_REDIRECT_URI')
 
 import sentry_sdk
 
