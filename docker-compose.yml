@@ -2,12 +2,10 @@ services:
   bigbro-nginx:
     container_name: bigbro-nginx
     image: nginx:latest
-    ports:
-      - "80:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-    networks:
-      - bigbro-network
+    ports:
+      - "80:80"
     depends_on:
       - bigbro-application
 
@@ -18,10 +16,5 @@ services:
       context: .
     env_file:
       - ~/.env
-    networks:
-      - bigbro-network
-    depends_on:
-      - bigbro-postgres
-      - bigbro-redis
     ports:
       - "8000:8000"
