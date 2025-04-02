@@ -10,7 +10,10 @@ else
   git pull origin develop
 fi
 
-docker-compose up --build -d
+docker build . -t bigbro-application
 
-docker container prune -f
-docker image prune -a -f
+docker stop bigbro-application  || true
+
+docker rm bigbro-application || true
+
+docker run -d --name bigbro-application --env-file ~/.env bigbro-application
