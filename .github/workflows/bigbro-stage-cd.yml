@@ -23,6 +23,6 @@ jobs:
       - name: Deploy with AWS CodeDeploy
         run: |
           aws deploy create-deployment \
-            --application-name bigbro-stage \
-            --deployment-group-name bigbro-stage \
+            --application-name bigbro \
+            --deployment-group-name stage \
             --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
