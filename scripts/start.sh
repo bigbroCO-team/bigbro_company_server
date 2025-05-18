@@ -17,5 +17,5 @@ docker rm bigbro-application || true
 
 docker run -d --name bigbro-application \
   --env-file ~/.env \
-  --network bigbro \
+  --network host \
   bigbro-application
