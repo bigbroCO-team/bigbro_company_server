@@ -4,7 +4,7 @@ from accounts.models import User
 
 
 class Address(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='address_id')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='address')
     name = models.CharField(max_length=17)
     phone = models.CharField(max_length=11)
     tag = models.CharField(max_length=20)
