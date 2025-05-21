@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import AddressView
+from address.views.address import AddressView
 
 
 urlpatterns = [
