@@ -11,6 +11,7 @@ from accounts.models import User
 class KakaoLoginCallbackService:
     @transaction.atomic
     def login(self, request: Request) -> str:
+        # kakao에서 access token 발급
         access_token_response = requests.post(
             url='https://kauth.kakao.com/oauth/token',
             headers={'Content-Type': 'application/x-www-form-urlencoded'},
@@ -27,7 +28,7 @@ class KakaoLoginCallbackService:
 
         access_token = access_token_response.json().get('access_token')
 
-        # Get userinfo
+        # kakao에서 사용자 정보 조회
         user_info_response = requests.get(
             url="https://kapi.kakao.com/v2/user/me",
             headers={"Authorization": f"Bearer {access_token}"}
@@ -35,9 +36,12 @@ class KakaoLoginCallbackService:
         if not user_info_response.status_code == 200:
             raise LoginFailException()
 
+        # 이메일 파싱
         user_email = user_info_response.json()["kakao_account"]["email"]
 
-        user = User.get_or_create(email=user_email)
+        # 만약 사용자가 없다면 사용자 생성
+        if not (user := User.objects.filter(email=user_email).first()):
+            user = User.objects.create(email=user_email)
 
         login(request, user)
 
