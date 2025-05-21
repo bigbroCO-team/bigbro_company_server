@@ -9,7 +9,7 @@ from .models import Address
 class AddressSerializer(ModelSerializer):
     class Meta:
         model = Address
-        fields = ('id', 'name', 'zipcode', 'phone', 'address', 'detail')
+        fields = ('id', 'tag', 'name', 'zipcode', 'phone', 'address', 'detail', 'request', 'default')
 
     def validate_phone(self, value):
         if not re.fullmatch(r'^\d{10,11}$', value):

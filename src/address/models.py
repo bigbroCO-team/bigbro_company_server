@@ -1,6 +1,7 @@
 from django.db import models
 
 from accounts.models import User
+from address.exceptions import AddressTooManyDefaultFieldException
 
 
 class Address(models.Model):
@@ -12,6 +13,13 @@ class Address(models.Model):
     address = models.TextField()
     detail = models.CharField(max_length=50)
     request = models.TextField(null=True)
+    default = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'address'
+
+    def clean(self):
+        if self.default:
+            address_default_count = Address.objects.filter(user=self.user).values('default').exists()
+            if address_default_count:
+                raise AddressTooManyDefaultFieldException()
