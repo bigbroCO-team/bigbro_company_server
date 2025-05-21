@@ -1,5 +1,7 @@
-from core.exceptions import BaseCustomException
+from rest_framework.exceptions import APIException
 
 
-class LoginException:
-    LoginFailException = BaseCustomException(code=400, detail='Fail to login')
+class LoginFailException(APIException):
+    status_code = 400
+    default_detail = 'Fail to login'
+    default_code = 'fail_to_login'

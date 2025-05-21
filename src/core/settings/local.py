@@ -6,9 +6,9 @@ from .base import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'bigbro',
-        'USER': 'bigbro',
-        'PASSWORD': 'bigbro',
+        'NAME': os.environ.get('DB_NAME', 'bigbro'),
+        'USER': os.environ.get('DB_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DB_PASS', 'postgres'),
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }

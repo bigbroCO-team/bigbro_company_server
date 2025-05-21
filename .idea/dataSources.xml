@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="bigbro@stage" uuid="faa1ebaa-3631-408f-a7aa-bd33ca4eeb93">
+    <data-source source="LOCAL" name="bigbro@localhost" uuid="7b5d5f44-79af-490d-9403-820cdc9b6837">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/bigbro</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="bigbro@localhost" uuid="7b5d5f44-79af-490d-9403-820cdc9b6837">
+    <data-source source="LOCAL" name="bigbro@stage" uuid="6925ce87-93be-4f43-9709-e577859526e9">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
