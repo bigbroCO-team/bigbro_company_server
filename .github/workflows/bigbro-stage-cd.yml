@@ -1,4 +1,4 @@
-name: Bigbro Stage Deploy
+name: Bigbro Stage CD Workflow
 
 on:
   push:
