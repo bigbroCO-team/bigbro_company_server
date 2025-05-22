@@ -7,8 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 
 from address.services.address import AddressService
 from core.authentication import CsrfExemptSessionAuthentication
-from address.exceptions import AddressNotFoundException
-from address.models import Address
 from address.serializers import AddressSerializer
 
 
