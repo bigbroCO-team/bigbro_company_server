@@ -8,7 +8,7 @@ on:
 
 env:
   AWS_REGION: ap-northeast-2
-  ECR_REPOSITORY: bigbro
+  ECR_REPOSITORY: bigbro-stage
   ECS_SERVICE: bigbro-stage
   ECS_CLUSTER: bigbro
   ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION
