@@ -3,7 +3,7 @@ name: Bigbro Stage Deploy
 on:
   push:
     branches:
-      - *
+      - '*'
 
 env:
   AWS_REGION: ap-northeast-2
