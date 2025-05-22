@@ -16,7 +16,7 @@
 			],
 			"environmentFiles": [
 				{
-					"value": "arn:aws:s3:::bigbro-company/.env.stage",
+					"value": "arn:aws:s3:::bigbro-company/stage.env",
 					"type": "s3"
 				}
 			]
