@@ -3,7 +3,8 @@ name: Bigbro Stage CD Workflow
 on:
   push:
     branches:
-      - '*'
+      - feat/issue-45-ecs-deploy
+      - develop
 
 env:
   AWS_REGION: ap-northeast-2
