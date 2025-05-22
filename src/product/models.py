@@ -1,18 +1,6 @@
 from django.db import models
 
-
-class ProductBrand(models.TextChoices):
-    BIGBRO = 'BIGBRO'
-    SCB = 'S.C.B'
-    SCULFEE = 'SCULFEE'
-    GONGNEWGI = 'GONGNEWGI'
-    CBWAS = 'CBWAS'
-
-
-class ProductStatus(models.TextChoices):
-    ON = 'ON'
-    OFF = 'OFF'
-    EMPTY = 'EMPTY'
+from product.enums import ProductBrand, ProductStatus
 
 
 class Product(models.Model):
@@ -32,7 +20,7 @@ class Product(models.Model):
     
 
 class ProductImage(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='image')
     url = models.URLField()
 
     class Meta:
@@ -43,7 +31,7 @@ class ProductImage(models.Model):
     
 
 class ProductOption(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='options')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='option')
     name = models.CharField(max_length=30)
 
     class Meta:

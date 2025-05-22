@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
 from .models import Cart
-from product.models import ProductOption, ProductStatus
-from product.serializers import ProductReadSerializer, ProductOptionSerializer
+from product.models import ProductStatus
+from product.serializers import ProductOptionSerializer, ProductReadSerializer
 from product.exceptions import ProductException
 from .exceptions import CartExceptions
 
