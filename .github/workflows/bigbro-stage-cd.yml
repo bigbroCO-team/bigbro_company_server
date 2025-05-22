@@ -11,7 +11,7 @@ env:
   ECR_REPOSITORY: bigbro-stage
   ECS_SERVICE: bigbro-stage
   ECS_CLUSTER: bigbro
-  ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION
+  ECS_TASK_DEFINITION: ecs-deploy.json
 
   CONTAINER_NAME: bigbro-stage-container
 
