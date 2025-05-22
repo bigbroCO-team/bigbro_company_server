@@ -11,10 +11,10 @@ class AddressService:
         self.address = address
 
     def get_my_address(self, request: Request):
-        return self.address.objects.filter(user_id=request.user)
+        return self.address.objects.filter(user=request.user)
 
     def get_default_address(self, request: Request):
-        return self.address.objects.get(user_id=request.user, default=True)
+        return self.address.objects.get(user=request.user, default=True)
 
     @transaction.atomic
     def save(self, user, serializer: AddressSerializer):
