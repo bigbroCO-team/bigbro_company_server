@@ -20,3 +20,5 @@ docker run -d --name bigbro-application \
   --network host \
   -p 80:80 \
   bigbro-application
+
+docker system prune -f
