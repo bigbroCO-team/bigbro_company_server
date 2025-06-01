@@ -19,3 +19,5 @@ docker run -d --name bigbro-application \
   --env-file ~/.env \
   --network host \
   bigbro-application
+
+docker system prune -f
