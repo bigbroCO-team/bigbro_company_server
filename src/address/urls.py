@@ -7,4 +7,5 @@ urlpatterns = [
     path('', AddressView.as_view()),
     path('/<int:address_id>', AddressView.as_view()),
     path('/default', DefaultAddressView.as_view()),
+    path('/default/<int:address_id>', DefaultAddressView.as_view()),
 ]
