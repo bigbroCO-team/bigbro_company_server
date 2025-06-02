@@ -41,3 +41,10 @@ class AddressService:
         if not address:
             raise AddressNotFoundException()
         address.delete()
+
+    @transaction.atomic
+    def set_default(self, user, address_id: int):
+        Address.objects.filter(user=user).update(default=False)
+        address = Address.objects.get(id=address_id, user=user)
+        address.default = True
+        address.save()
