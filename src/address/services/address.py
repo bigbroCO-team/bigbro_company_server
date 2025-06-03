@@ -1,5 +1,4 @@
 from django.db import transaction
-from rest_framework.request import Request
 
 from address.exceptions import AddressNotFoundException
 from address.models import Address
