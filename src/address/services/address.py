@@ -29,13 +29,20 @@ class AddressService:
 
     @transaction.atomic
     def update(self, user, address_id: int, serializer: AddressSerializer):
-        exists_address = self.address.objects.get(
+        exists_address = self.address.objects.filter(
             id=address_id,
             user=user
-        )
-        exists_address.full_clean()
-        serializer.instance = exists_address
-        serializer.save()
+        ).first()
+        if not exists_address:
+            raise AddressNotFoundException()
+
+        for attr, value in serializer.validated_data.items():
+            setattr(exists_address, attr, value)
+
+        if exists_address.default:
+            Address.objects.filter(user=user).update(default=False)
+        exists_address.save()
+
 
     @transaction.atomic
     def delete(self, user, address_id: int):
