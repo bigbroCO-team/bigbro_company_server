@@ -17,12 +17,19 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 
 class ProductReadSerializer(serializers.ModelSerializer):
-    option = ProductOptionSerializer(many=True, read_only=True)
-    image = ProductImageSerializer(many=True, read_only=True)
+    options = serializers.SerializerMethodField(read_only=True)
+    images = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Product
-        fields = ('id', 'brand', 'name', 'description', 'price', 'discount', 'status', 'created', 'option', 'image')
+        fields = ('id', 'brand', 'name', 'description', 'price', 'discount', 'status', 'created', 'options', 'images')
+
+    def get_options(self, obj):
+        return [str(o) for o in obj.option.all()]
+
+    def get_images(self, obj):
+        return [str(i) for i in obj.option.all()]
+
 
 
 class ProductWriteSerializer(serializers.ModelSerializer):
