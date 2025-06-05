@@ -16,13 +16,11 @@ class ProductService:
         self.product_option = product_option
         self.product_image = product_image
 
-    def get_product_list(self, product_id: int = None, brand_name: str = None):
-        if product_id:
-            return self.product.objects.filter(id=product_id).prefetch_related('image', 'option')
-        elif brand_name:
-            return self.product.objects.filter(brand=brand_name).prefetch_related('image', 'option')
-        else:
-            raise InvalidProductQueryException()
+    def get_product_list(self, brand_name: str = None):
+        return self.product.objects.filter(brand=brand_name).prefetch_related('image', 'option')
+
+    def get_product_by_id(self, product_id: int = None):
+        return self.product.objects.filter(id=product_id).prefetch_related('image', 'option').first()
 
     @transaction.atomic
     def save(self, serializer: ProductWriteSerializer):

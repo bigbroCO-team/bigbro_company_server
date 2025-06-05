@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.HealthCheckMiddleware',
+    'request_logging.middleware.LoggingMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -63,6 +64,38 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
     ],
+}
+
+
+# Logging
+LOKI_HOST = os.environ.get('LOKI_HOST', 'http://localhost:3100')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'loki': {
+            'class': 'logging_loki.LokiHandler',
+            'level': 'INFO',
+            'url': f'{LOKI_HOST}/loki/api/v1/push',
+            'tags': {'application': 'bigbro'},
+            'version': '1',
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['console', 'loki'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+    'root': {
+        'handlers': ['console', 'loki'],
+        'level': 'INFO',
+    },
 }
 
 AUTH_USER_MODEL = 'accounts.User'
