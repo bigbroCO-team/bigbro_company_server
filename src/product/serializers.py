@@ -25,10 +25,10 @@ class ProductReadSerializer(serializers.ModelSerializer):
         fields = ('id', 'brand', 'name', 'description', 'price', 'discount', 'status', 'created', 'options', 'images')
 
     def get_options(self, obj):
-        return [str(o) for o in obj.option.all()]
+        return [o.name for o in obj.option.all()]
 
     def get_images(self, obj):
-        return [str(i) for i in obj.option.all()]
+        return [i.url for i in obj.image.all()]
 
 
 
