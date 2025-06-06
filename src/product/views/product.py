@@ -20,8 +20,12 @@ class ProductView(APIView):
             many=True
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
 
+    def post(self, request: Request) -> Response:
+        serializer = ProductWriteSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        ProductService().save(serializer)
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class ProductDetailView(APIView):
@@ -35,12 +39,6 @@ class ProductDetailView(APIView):
             ),
         )
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def post(self, request: Request) -> Response:
-        serializer = ProductWriteSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        ProductService().save(serializer)
-        return Response(status=status.HTTP_201_CREATED)
 
     def put(self, request: Request, product_id: int) -> Response:
         serializer = ProductWriteSerializer(data=request.data)
