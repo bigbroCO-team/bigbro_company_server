@@ -11,20 +11,19 @@ from product.services.product import ProductService
 class ProductView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsStaffOrReadOnly]
+
+    product_service = ProductService()
     
     def get(self, request: Request) -> Response:
-        serializer = ProductReadSerializer(
-            ProductService().get_product_list(
-                brand_name=request.GET.get('brand'),
-            ),
-            many=True
+        return Response(ProductReadSerializer(
+            self.product_service.get_product_list(brand_name=request.GET.get('brand')),many=True).data,
+            status=status.HTTP_200_OK
         )
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request: Request) -> Response:
         serializer = ProductWriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        ProductService().save(serializer)
+        self.product_service.save(serializer)
         return Response(status=status.HTTP_201_CREATED)
 
 
@@ -32,20 +31,20 @@ class ProductDetailView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsStaffOrReadOnly]
 
+    product_service = ProductService()
+
     def get(self, request: Request, product_id: int = None) -> Response:
-        serializer = ProductReadSerializer(
-            ProductService().get_product_by_id(
-                product_id=product_id,
-            ),
+        return Response(ProductReadSerializer(
+            self.product_service.get_product_by_id(product_id=product_id)).data,
+            status=status.HTTP_200_OK
         )
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request: Request, product_id: int) -> Response:
         serializer = ProductWriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        ProductService().update(product=product_id, serializer=serializer)
+        self.product_service.update(product=product_id, serializer=serializer)
         return Response(status=status.HTTP_200_OK)
 
     def delete(self, request: Request, product_id: int) -> Response:
-        ProductService().delete(product_id=product_id)
+        self.product_service.delete(product_id=product_id)
         return Response(status=status.HTTP_204_NO_CONTENT)

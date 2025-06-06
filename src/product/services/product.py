@@ -28,7 +28,7 @@ class ProductService:
         image = serializer.validated_data.pop('image')
 
         # Product 생성
-        product = Product.objects.create(**serializer.validated_data)
+        product = self.product.objects.create(**serializer.validated_data)
 
         # Product option 생성
         option_list = []
@@ -59,13 +59,13 @@ class ProductService:
         image = serializer.validated_data.pop('images')
 
         # Option 업데이트
-        product.option.all().delete()
+        self.product.option.all().delete()
         self.product_option.objects.bulk_create(
             [ProductOption(product=product, name=name) for name in option],
         )
 
         # Image 업데이트
-        product.image.all().delete()
+        self.product.image.all().delete()
         self.product_image.objects.bulk_create(
             [ProductImage(product=product, url=url) for url in image],
         )

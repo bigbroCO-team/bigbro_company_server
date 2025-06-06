@@ -20,7 +20,7 @@ class CartService:
     @transaction.atomic
     def save(self, user, serializer: CartWriteSerializer):
         # 기존 Cart 조회
-        exists_cart = Cart.objects.filter(
+        exists_cart = self.cart.objects.filter(
             user=user,
             product=serializer.validated_data.get('product'),
             option=serializer.validated_data.get('option')
@@ -39,4 +39,4 @@ class CartService:
 
     @transaction.atomic
     def delete(self, user, cart_id: int):
-        Cart.objects.get(user=user, id=cart_id).delete()
+        self.cart.objects.get(user=user, id=cart_id).delete()
