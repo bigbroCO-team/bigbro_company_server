@@ -12,9 +12,10 @@ class KakaoLoginView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [AllowAny]
 
+    kakao_login_service = KakaoLoginService()
+
     def get(self, request: Request) -> Response:
-        headers = {
-            'Location': KakaoLoginService().get_login_url(),
-        }
-        return Response(headers=headers, status=status.HTTP_302_FOUND)
+        return Response(headers={
+            'Location': self.kakao_login_service.get_login_url(),
+        }, status=status.HTTP_302_FOUND)
 

@@ -12,6 +12,8 @@ class LogoutView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsAuthenticated]
 
+    logout_service = LogoutService()
+
     def delete(self, request: Request) -> Response:
-        LogoutService().logout(request)
+        self.logout_service.logout(request)
         return Response(status=status.HTTP_200_OK)

@@ -15,18 +15,22 @@ class CartView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsAuthenticated]
 
+    cart_service = CartService()
+
     def get(self, request: Request) -> Response:
-        serializer = CartReadSerializer(CartService().get_my_cart_list(user=request.user), many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(CartReadSerializer(
+            self.cart_service.get_my_cart_list(user=request.user), many=True).data,
+            status=status.HTTP_200_OK
+        )
     
     @transaction.atomic
     def post(self, request: Request) -> Response:
         serializer = CartWriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        CartService().save(user=request.user, serializer=serializer)
+        self.cart_service.save(user=request.user, serializer=serializer)
         return Response(status=status.HTTP_201_CREATED)
     
     @transaction.atomic
     def delete(self, request: Request, cart_id: int) -> Response:
-        CartService().delete(user=request.user, cart_id=cart_id)
+        self.cart_service.delete(user=request.user, cart_id=cart_id)
         return Response(status=HTTP_204_NO_CONTENT)

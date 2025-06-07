@@ -13,6 +13,10 @@ class MyInfoView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsAuthenticated]
 
+    my_info_service = MyInfoService()
+
     def get(self, request: Request) -> Response:
-        serializer = MyInfoSerializer(MyInfoService().get_my_info(request))
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(MyInfoSerializer(
+            self.my_info_service.get_my_info(request)).data,
+            status=status.HTTP_200_OK
+        )

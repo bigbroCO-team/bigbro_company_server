@@ -13,14 +13,18 @@ class AddressView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsAuthenticated]
 
+    address_service = AddressService()
+
     def get(self, request: Request) -> Response:
-        serializer = AddressSerializer(AddressService().get_my_address(user=request.user), many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(AddressSerializer(
+            self.address_service.get_my_address(user=request.user), many=True).data,
+            status=status.HTTP_200_OK
+        )
     
     def post(self, request: Request) -> Response:
         serializer = AddressSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        AddressService().save(user=request.user, serializer=serializer)
+        self.address_service.save(user=request.user, serializer=serializer)
         return Response(status=status.HTTP_201_CREATED)
 
 
@@ -28,16 +32,20 @@ class AddressDetailView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsAuthenticated]
 
+    address_service = AddressService()
+
     def get(self, request: Request, address_id: int) -> Response:
-        serializer = AddressSerializer(AddressService().get_address_by_id(user=request.user, address_id=address_id))
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(AddressSerializer(
+            self.address_service.get_address_by_id(user=request.user, address_id=address_id)).data,
+            status=status.HTTP_200_OK
+        )
 
     def put(self, request: Request, address_id: int) -> Response:
         serializer = AddressSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        AddressService().update(user=request.user, address_id=address_id, serializer=serializer)
+        self.address_service.update(user=request.user, address_id=address_id, serializer=serializer)
         return Response(status=status.HTTP_200_OK)
 
     def delete(self, request: Request, address_id: int) -> Response:
-        AddressService().delete(user=request.user, address_id=address_id)
+        self.address_service.delete(user=request.user, address_id=address_id)
         return Response(status=status.HTTP_204_NO_CONTENT)

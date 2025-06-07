@@ -40,20 +40,20 @@ class AddressService:
             setattr(exists_address, attr, value)
 
         if exists_address.default:
-            Address.objects.filter(user=user).update(default=False)
+            self.address.objects.filter(user=user).update(default=False)
         exists_address.save()
 
 
     @transaction.atomic
     def delete(self, user, address_id: int):
-        address = Address.objects.filter(id=address_id, user=user).first()
+        address = self.address.objects.filter(id=address_id, user=user).first()
         if not address:
             raise AddressNotFoundException()
         address.delete()
 
     @transaction.atomic
     def set_default(self, user, address_id: int):
-        Address.objects.filter(user=user).update(default=False)
+        self.address.objects.filter(user=user).update(default=False)
         address = Address.objects.get(id=address_id, user=user)
         address.default = True
         address.save()
