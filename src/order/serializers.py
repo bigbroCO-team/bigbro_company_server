@@ -1,25 +1,20 @@
 from rest_framework import serializers
 
+from product.serializers import ProductReadSerializer, ProductOptionSerializer
 from .models import Order, OrderItem
 from product.models import Product, ProductOption
 from address.models import Address
 from product.exceptions import ProductException, ProductOptionException
 
 
-class OrderReadSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Order
-        fields = '__all__'
-
-
-class ProductItemSerializer(serializers.Serializer):
+class OrderItemWriteSerializer(serializers.Serializer):
     products = serializers.ListField()
     address = serializers.IntegerField()
     quantity = serializers.IntegerField()
 
 
 class OrderWriteSerializer(serializers.Serializer):
-    products = ProductItemSerializer(many=True)
+    products = OrderItemWriteSerializer(many=True)
     address = serializers.IntegerField()
 
     def create(self, validated_data):
@@ -62,3 +57,20 @@ class OrderWriteSerializer(serializers.Serializer):
         order.save()
 
         return order
+
+
+class OrderItemReadSerializer(serializers.ModelSerializer):
+    product = ProductReadSerializer()
+    product_option = ProductOptionSerializer()
+
+    class Meta:
+        model = OrderItem
+        fields = ('id', 'product', 'product_option', 'quantity')
+
+
+class OrderReadSerializer(serializers.ModelSerializer):
+    items = OrderItemReadSerializer(many=True, source='order_item')
+
+    class Meta:
+        model = Order
+        fields = '__all__'
