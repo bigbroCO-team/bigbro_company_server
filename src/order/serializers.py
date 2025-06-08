@@ -73,4 +73,8 @@ class OrderReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = (
+            'id', 'total_price', 'tracking_number', 'delivery_company',
+            'address', 'address_detail', 'zipcode', 'request', 'phone',
+            'items'
+        )
