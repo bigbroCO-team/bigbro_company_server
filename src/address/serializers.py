@@ -11,6 +11,10 @@ class AddressSerializer(ModelSerializer):
         model = Address
         fields = ('id', 'tag', 'name', 'zipcode', 'phone', 'address', 'detail', 'request', 'default')
 
+        extra_kwargs = {
+            'request': {'required': False},
+        }
+
     def validate_phone(self, value):
         if not re.fullmatch(r'^\d{10,11}$', value):
             raise PhoneNumberIsNotValidException()
