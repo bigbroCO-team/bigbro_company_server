@@ -9,8 +9,8 @@ class Order(models.Model):
 
     total_price = models.PositiveIntegerField(null=True)
 
-    tracking_number = models.CharField(max_length=50, null=True)
-    delivery_company = models.CharField(max_length=50, null=True)
+    tracking_number = models.CharField(max_length=50, null=True, blank=True)
+    delivery_company = models.CharField(max_length=50, null=True, blank=True)
 
     address = models.TextField()
     address_detail = models.CharField(max_length=50)
