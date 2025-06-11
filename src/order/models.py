@@ -38,6 +38,7 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     product_option = models.ForeignKey(ProductOption, on_delete=models.SET_NULL, null=True)
     quantity = models.PositiveSmallIntegerField()
+    status = models.BooleanField(default=False)
     
     class Meta:
         db_table = 'order_item'
