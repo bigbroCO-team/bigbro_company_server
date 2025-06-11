@@ -1,6 +1,7 @@
 from django.db import models
 
 from accounts.models import User
+from order.enums import OrderItemStatus
 from product.models import Product, ProductOption
 
 
@@ -38,6 +39,7 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     product_option = models.ForeignKey(ProductOption, on_delete=models.SET_NULL, null=True)
     quantity = models.PositiveSmallIntegerField()
+    status = models.CharField(choices=OrderItemStatus.choices, max_length=16)
     
     class Meta:
         db_table = 'order_item'
