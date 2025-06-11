@@ -1,4 +1,3 @@
-from django.db import transaction
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -6,24 +5,24 @@ from rest_framework.request import Request
 from rest_framework.permissions import IsAuthenticated
 
 from core.authentication import CsrfExemptSessionAuthentication
-from .models import Order
-from .serializers import OrderReadSerializer, OrderWriteSerializer
+from order.serializers import OrderReadSerializer, OrderWriteSerializer
+from order.services.order import OrderService
 
 
 class OrderView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsAuthenticated]
 
+    order_service = OrderService()
+
     def get(self, request: Request) -> Response:
-        order = Order.objects.filter(user=request.user).prefetch_related('order_item')
-        serializer = OrderReadSerializer(order, many=True)
+        serializer = OrderReadSerializer(self.order_service.get_my_order_list(request.user), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    @transaction.atomic
     def post(self, request: Request) -> Response:
         serializer = OrderWriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(user=request.user)
+        self.order_service.create(user=request.user, serializer=serializer)
         return Response(status=status.HTTP_201_CREATED)
 
 
@@ -31,7 +30,8 @@ class OrderDetailView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsAuthenticated]
 
+    order_service = OrderService()
+
     def get(self, request: Request, order_id: int) -> Response:
-        order = Order.objects.get(id=order_id, user=request.user)
-        serializer = OrderReadSerializer(order)
+        serializer = OrderReadSerializer(self.order_service.get_my_order_by_id(request.user, order_id))
         return Response(serializer.data, status=status.HTTP_200_OK)
