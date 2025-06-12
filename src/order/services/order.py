@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 
 from address.exceptions import AddressNotFoundException
 from address.models import Address
@@ -39,9 +40,7 @@ class OrderService:
         total_price = 0
 
         # Get address
-        address = Address.objects.filter(id=address).first()
-        if not address:
-            raise AddressNotFoundException()
+        address = get_object_or_404(Address, id=address)
 
         # Create order
         order = Order.objects.create(
@@ -56,17 +55,23 @@ class OrderService:
         # Create order items
         order_items = []
         for _product in products:
-            product = self.product.objects.filter(id=_product['product']).first()
-            if not product:
-                raise ProductNotFoundException()
+            # Product, Option 조회
+            product = get_object_or_404(Product, id=_product['product'])
+            option = get_object_or_404(ProductOption, name=_product['option'])
 
-            option = self.product_option.objects.filter(id=_product['option']).first()
-            if not option:
-                raise OptionNotFoundException()
+            # order.total_price 계산
+            total_price += (product.price - int(product.price * product.discount / 100)) * _product['quantity']
 
-            total_price += (product.price - int(product.price * product.discount / 100)) * p['quantity']
-
-            order_items.append(OrderItem(product=product, product_option=option, order=order))
+            # order item 추가
+            order_items.append(
+                OrderItem(
+                    product=product,
+                    product_option=option,
+                    order=order,
+                    quantity=_product['quantity'],
+                    price=product.price,  # 추후 item에 가격 변동시 조정 필요
+                )
+            )
 
         self.order_item.objects.bulk_create(order_items)
 
