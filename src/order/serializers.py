@@ -7,8 +7,8 @@ from .models import Order, OrderItem
 
 
 class OrderItemWriteSerializer(serializers.Serializer):
-    products = serializers.ListField()
-    address = serializers.IntegerField()
+    product = serializers.IntegerField()
+    option = serializers.CharField()
     quantity = serializers.IntegerField()
 
 
@@ -23,7 +23,7 @@ class OrderItemReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
-        fields = ('id', 'product', 'product_option', 'quantity', 'status')
+        fields = ('id', 'product', 'product_option', 'quantity', 'status', 'price')
 
 
 class OrderReadSerializer(serializers.ModelSerializer):

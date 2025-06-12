@@ -77,23 +77,16 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
         },
-        'loki': {
-            'class': 'logging_loki.LokiHandler',
-            'level': 'INFO',
-            'url': f'{LOKI_HOST}/loki/api/v1/push',
-            'tags': {'application': 'bigbro'},
-            'version': '1',
-        },
     },
     'loggers': {
         'django.request': {
-            'handlers': ['console', 'loki'],
-            'level': 'INFO',
+            'handlers': ['console'],
+            'level': 'DEBUG',
             'propagate': False,
         },
     },
     'root': {
-        'handlers': ['console', 'loki'],
+        'handlers': ['console'],
         'level': 'INFO',
     },
 }
