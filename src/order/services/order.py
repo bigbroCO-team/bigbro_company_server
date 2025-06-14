@@ -48,7 +48,7 @@ class OrderService:
             address=address.address,
             address_detail=address.detail,
             zipcode=address.zipcode,
-            request=address.request,
+            request=serializer.validated_data.get('request'),
             phone=address.phone,
         )
 
