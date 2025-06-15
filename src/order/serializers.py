@@ -15,6 +15,7 @@ class OrderItemWriteSerializer(serializers.Serializer):
 class OrderWriteSerializer(serializers.Serializer):
     products = OrderItemWriteSerializer(many=True)
     address = serializers.IntegerField()
+    request = serializers.CharField()
 
 
 class OrderItemReadSerializer(serializers.ModelSerializer):

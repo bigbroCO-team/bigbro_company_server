@@ -12,7 +12,6 @@ class Address(models.Model):
     zipcode = models.CharField(max_length=10)
     address = models.TextField()
     detail = models.CharField(max_length=50)
-    request = models.TextField(null=True)
     default = models.BooleanField(default=False)
 
     class Meta:
