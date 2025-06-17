@@ -1,12 +1,16 @@
 from rest_framework.exceptions import APIException
 
-from core.exceptions import BaseCustomException
+
+class ProductIsNotOnSaleException(APIException):
+    status_code = 400
+    detail = 'Product is not on sale'
+    default_code = 'productIsNotOnSaleException'
 
 
-class ProductException:
-    invalidDiscount = BaseCustomException(code=400, detail='Invalid Discount.')
-    optionNotFound = BaseCustomException(code=404, detail='Options Not Found.')
-    productIsNotOnSale = BaseCustomException(code=400, detail='Product is not on sale')
+class InvalidDiscountException(APIException):
+    status_code = 400
+    detail = 'Invalid Discount.'
+    default_code = 'invalidDiscount'
 
 
 class OptionNotFoundException(APIException):

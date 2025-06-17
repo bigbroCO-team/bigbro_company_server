@@ -1,6 +1,6 @@
+from django.core.validators import MinLengthValidator
 from rest_framework import serializers
 
-from accounts.exceptions import PasswordTooShortException
 from accounts.models import User
 from address.serializers import AddressSerializer
 
@@ -12,15 +12,10 @@ class LoginSerializer(serializers.Serializer):
 
 class SignupSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=30)
-    password = serializers.CharField(write_only=True)
-
-    def validate_password(self, value):
-        if len(value) < 6:
-            raise PasswordTooShortException()
-        return value
-
-    def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+    password = serializers.CharField(
+        write_only=True,
+        validators=[MinLengthValidator(6)]
+    )
 
 
 class MyInfoSerializer(serializers.ModelSerializer):

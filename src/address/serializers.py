@@ -1,17 +1,14 @@
-import re
+from django.core.validators import RegexValidator
+from rest_framework import serializers
 
-from rest_framework.serializers import ModelSerializer
-
-from .exceptions import PhoneNumberIsNotValidException
 from .models import Address
 
 
-class AddressSerializer(ModelSerializer):
+class AddressSerializer(serializers.ModelSerializer):
+    phone = serializers.CharField(
+        validators=[RegexValidator(regex=r'^\d{10,11}$')]
+    )
+
     class Meta:
         model = Address
         fields = ('id', 'tag', 'name', 'zipcode', 'phone', 'address', 'detail', 'default')
-
-    def validate_phone(self, value):
-        if not re.fullmatch(r'^\d{10,11}$', value):
-            raise PhoneNumberIsNotValidException()
-        return value

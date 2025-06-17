@@ -7,12 +7,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.status import HTTP_204_NO_CONTENT
 
 from cart.services.cart import CartService
-from core.authentication import CsrfExemptSessionAuthentication
 from cart.serilaizers import CartReadSerializer, CartWriteSerializer
 
 
 class CartView(APIView):
-    authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsAuthenticated]
 
     cart_service = CartService()

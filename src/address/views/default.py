@@ -6,11 +6,9 @@ from rest_framework.views import APIView
 
 from address.serializers import AddressSerializer
 from address.services.address import AddressService
-from core.authentication import CsrfExemptSessionAuthentication
 
 
 class DefaultAddressView(APIView):
-    authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsAuthenticated]
 
     address_service = AddressService()

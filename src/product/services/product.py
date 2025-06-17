@@ -21,7 +21,7 @@ class ProductService:
         return self.product.objects.filter(brand=brand_name).prefetch_related('image', 'option')
 
     def get_product_by_id(self, product_id: int = None):
-        return self.product.objects.filter(id=product_id).prefetch_related('image', 'option').first()
+        return get_object_or_404(Product, id=product_id).prefetch_related('image', 'option')
 
     @transaction.atomic
     def save(self, serializer: ProductWriteSerializer):
