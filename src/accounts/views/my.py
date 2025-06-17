@@ -6,11 +6,9 @@ from rest_framework.views import APIView
 
 from accounts.serializers import MyInfoSerializer
 from accounts.services.my import MyInfoService
-from core.authentication import CsrfExemptSessionAuthentication
 
 
 class MyInfoView(APIView):
-    authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsAuthenticated]
 
     my_info_service = MyInfoService()

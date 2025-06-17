@@ -3,13 +3,12 @@ from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from core.authentication import CsrfExemptSessionAuthentication, IsStaffOrReadOnly
+from core.authentication import IsStaffOrReadOnly
 from product.serializers import ProductReadSerializer, ProductWriteSerializer
 from product.services.product import ProductService
 
 
 class ProductView(APIView):
-    authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsStaffOrReadOnly]
 
     product_service = ProductService()
@@ -28,7 +27,6 @@ class ProductView(APIView):
 
 
 class ProductDetailView(APIView):
-    authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsStaffOrReadOnly]
 
     product_service = ProductService()

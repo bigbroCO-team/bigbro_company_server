@@ -1,7 +1,6 @@
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
-from address.exceptions import AddressNotFoundException
 from address.models import Address
 from address.serializers import AddressSerializer
 
@@ -45,14 +44,11 @@ class AddressService:
 
     @transaction.atomic
     def delete(self, user, address_id: int):
-        address = self.address.objects.filter(id=address_id, user=user).first()
-        if not address:
-            raise AddressNotFoundException()
-        address.delete()
+        get_object_or_404(Address, id=address_id, user=user).delete()
 
     @transaction.atomic
     def set_default(self, user, address_id: int):
-        self.address.objects.filter(user=user).update(default=False)
+        get_object_or_404(Address, user=user).update(default=False)
         address = get_object_or_404(Address, id=address_id, user=user)
         address.default = True
         address.save()
