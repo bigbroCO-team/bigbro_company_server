@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 
 from cart.models import Cart
 from product.models import ProductOption
@@ -11,7 +12,7 @@ class CartService:
     @transaction.atomic
     def create(self, user, product, option, count):
 
-        option_obj = ProductOption.objects.get(
+        option_obj = get_object_or_404(ProductOption,
             product_id=product,
             name=option
         )

@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 
 from product.exceptions import InvalidProductQueryException
 from product.models import Product, ProductOption, ProductImage
@@ -75,4 +76,4 @@ class ProductService:
 
     @transaction.atomic
     def delete(self, product_id: int):
-        self.product.objects.get(id=product_id).delete()
+        get_object_or_404(Product, id=product_id).delete()

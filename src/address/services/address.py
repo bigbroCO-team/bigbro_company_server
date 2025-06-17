@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 
 from address.exceptions import AddressNotFoundException
 from address.models import Address
@@ -13,10 +14,10 @@ class AddressService:
         return self.address.objects.filter(user=user)
 
     def get_address_by_id(self, user, address_id: int) -> Address:
-        return self.address.objects.get(user=user, id=address_id)
+        return get_object_or_404(Address, user=user, id=address_id)
 
     def get_default_address(self, user):
-        return self.address.objects.get(user=user, default=True)
+        return get_object_or_404(Address, user=user, default=True)
 
     @transaction.atomic
     def save(self, user, serializer: AddressSerializer):
@@ -29,12 +30,10 @@ class AddressService:
 
     @transaction.atomic
     def update(self, user, address_id: int, serializer: AddressSerializer):
-        exists_address = self.address.objects.filter(
+        exists_address = get_object_or_404(Address,
             id=address_id,
             user=user
-        ).first()
-        if not exists_address:
-            raise AddressNotFoundException()
+        )
 
         for attr, value in serializer.validated_data.items():
             setattr(exists_address, attr, value)
@@ -54,6 +53,6 @@ class AddressService:
     @transaction.atomic
     def set_default(self, user, address_id: int):
         self.address.objects.filter(user=user).update(default=False)
-        address = Address.objects.get(id=address_id, user=user)
+        address = get_object_or_404(Address, id=address_id, user=user)
         address.default = True
         address.save()
