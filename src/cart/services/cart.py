@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 
 from cart.models import Cart
 from cart.serilaizers import CartWriteSerializer
@@ -39,4 +40,4 @@ class CartService:
 
     @transaction.atomic
     def delete(self, user, cart_id: int):
-        self.cart.objects.get(user=user, id=cart_id).delete()
+        get_object_or_404(Cart, user=user, id=cart_id).delete()
