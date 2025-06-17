@@ -1,8 +1,8 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from rest_framework import serializers
 
 from .models import Product, ProductOption, ProductImage
-from .exceptions import ProductException
-    
+
 
 class ProductOptionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,12 +35,13 @@ class ProductReadSerializer(serializers.ModelSerializer):
 class ProductWriteSerializer(serializers.ModelSerializer):
     option = serializers.ListField(write_only=True)
     image = serializers.ListField(write_only=True)
+    discount = serializers.IntegerField(
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(100)
+        ]
+    )
 
     class Meta:
         model = Product
         fields = ('id', 'brand', 'name', 'description', 'price', 'discount', 'status', 'created', 'option', 'image')
-
-    def validate_discount(self, value):
-        if value < 0 or value > 100:
-            raise ProductException.invalidDiscount
-        return value

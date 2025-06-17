@@ -10,7 +10,6 @@ DEBUG = os.environ.get("DEBUG") == "True"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(",")
 
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'core.exceptions.exception_handler',
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     ),
