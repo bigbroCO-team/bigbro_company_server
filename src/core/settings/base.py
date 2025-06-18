@@ -61,8 +61,8 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'core.authentication.CsrfExemptSessionAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'core.authentication.CsrfExemptSessionAuthentication'
     ],
 }
 
