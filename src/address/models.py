@@ -2,9 +2,10 @@ from django.db import models
 
 from accounts.models import User
 from address.exceptions import AddressTooManyDefaultFieldException
+from core.basemodel import BaseModel
 
 
-class Address(models.Model):
+class Address(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='address')
     name = models.CharField(max_length=17)
     phone = models.CharField(max_length=11)

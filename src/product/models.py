@@ -1,16 +1,16 @@
 from django.db import models
 
+from core.basemodel import BaseModel
 from product.enums import ProductBrand, ProductStatus
 
 
-class Product(models.Model):
+class Product(BaseModel):
     brand = models.CharField(choices=ProductBrand.choices, max_length=9)
     name = models.CharField(max_length=30)
     description = models.TextField()
     price = models.PositiveIntegerField()
     discount = models.FloatField()
     status = models.CharField(choices=ProductStatus.choices, max_length=5)
-    created = models.DateField(auto_now_add=True)
 
     class Meta:
         db_table = 'product'
@@ -19,7 +19,7 @@ class Product(models.Model):
         return self.name
     
 
-class ProductImage(models.Model):
+class ProductImage(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='image')
     url = models.URLField()
 
@@ -30,7 +30,7 @@ class ProductImage(models.Model):
         return self.product.name
     
 
-class ProductOption(models.Model):
+class ProductOption(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='option')
     name = models.CharField(max_length=30)
 
