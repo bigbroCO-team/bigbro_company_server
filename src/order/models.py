@@ -1,11 +1,12 @@
 from django.db import models
 
 from accounts.models import User
+from core.basemodel import BaseModel
 from order.enums import OrderItemStatus
 from product.models import Product, ProductOption
 
 
-class Order(models.Model):
+class Order(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     total_price = models.PositiveIntegerField(null=True)  # 최종 총합 주문 가격
@@ -23,9 +24,6 @@ class Order(models.Model):
 #   paymentkey = models.CharField()
 #   orderid = models.CharField()
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
     class Meta:
         db_table = 'order'
 
@@ -33,7 +31,7 @@ class Order(models.Model):
         return self.user.username
     
 
-class OrderItem(models.Model):
+class OrderItem(BaseModel):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="order_item")  # 주문
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=False)  # 상품
     product_option = models.ForeignKey(ProductOption, on_delete=models.SET_NULL, null=True, blank=False)  # 상품 옵션
