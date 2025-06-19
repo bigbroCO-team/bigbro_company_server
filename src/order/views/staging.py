@@ -13,8 +13,5 @@ class OrderStagingView(APIView):
     order_staging_service = OrderStagingService()
 
     def get(self, request):
-        serializer = OrderReadSerializer(
-            self.order_staging_service.get(),
-            many=True,
-        )
+        serializer = OrderReadSerializer(self.order_staging_service.get())
         return Response(serializer.data, status=status.HTTP_200_OK)
