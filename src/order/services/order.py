@@ -64,7 +64,7 @@ class OrderService:
 
         self.order_item.objects.bulk_create(order_items)
 
-        order.total_price = total_price
+        order.total_price = total_price + (order.delivery_cost if total_price < 50000 else 0)
         order.save()
 
     @transaction.atomic

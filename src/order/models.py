@@ -13,6 +13,7 @@ class Order(BaseModel):
 
     tracking_number = models.CharField(max_length=50, null=True, blank=True)  # 배송 추적 번호
     delivery_company = models.CharField(max_length=50, null=True, blank=True)  # 배송 회사명
+    delivery_cost = models.PositiveIntegerField(default=3000)  # 배송비
 
     address = models.TextField(null=True)  # 주소지
     address_detail = models.CharField(max_length=50, null=True)  # 상세 주소
