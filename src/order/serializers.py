@@ -2,7 +2,7 @@ import requests
 from django.conf import settings
 from rest_framework import serializers
 
-from product.serializers import ProductReadSerializer, ProductOptionSerializer
+from product.serializers import ProductReadSerializer
 from .models import Order, OrderItem
 
 
@@ -23,11 +23,14 @@ class OrderWriteSerializer(serializers.Serializer):
 
 class OrderItemReadSerializer(serializers.ModelSerializer):
     product = ProductReadSerializer()
-    product_option = ProductOptionSerializer()
+    product_option = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = OrderItem
         fields = ('id', 'product', 'product_option', 'quantity', 'status', 'price')
+
+    def get_product_option(self, obj):
+        return obj.product_option.name
 
 
 class OrderReadSerializer(serializers.ModelSerializer):
