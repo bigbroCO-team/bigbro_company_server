@@ -40,4 +40,4 @@ class OrderDetailView(APIView):
         serializer = OrderPatchSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.order_service.patch(user=request.user, serializer=serializer, order_id=order_id)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
