@@ -19,6 +19,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
 class ProductReadSerializer(serializers.ModelSerializer):
     options = serializers.SerializerMethodField(read_only=True)
     images = serializers.SerializerMethodField(read_only=True)
+    created = serializers.DateTimeField(read_only=True, source='created_at', format='%Y-%m-%d')
 
     class Meta:
         model = Product
@@ -29,7 +30,6 @@ class ProductReadSerializer(serializers.ModelSerializer):
 
     def get_images(self, obj):
         return [i.url for i in obj.image.all()]
-
 
 
 class ProductWriteSerializer(serializers.ModelSerializer):
@@ -44,4 +44,4 @@ class ProductWriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'brand', 'name', 'description', 'price', 'discount', 'status', 'created', 'option', 'image')
+        fields = ('id', 'brand', 'name', 'description', 'price', 'discount', 'status', 'option', 'image')

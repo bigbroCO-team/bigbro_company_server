@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from address.models import Address
 from order.exceptions import OrderNotFoundException
 from order.models import Order, OrderItem
-from order.serializers import OrderWriteSerializer
+from order.serializers import OrderWriteSerializer, OrderPatchSerializer
 from product.models import Product, ProductOption
 
 
@@ -24,7 +24,7 @@ class OrderService:
         self.order_item = order_item
 
     def get_my_order_by_id(self, user, order_id):
-        order = self.order.objects.filter(user=user).prefetch_related('order_item')
+        order = self.order.objects.filter(user=user, id=order_id).prefetch_related('order_item')
         if not order:
             raise OrderNotFoundException()
 
@@ -34,20 +34,12 @@ class OrderService:
     @transaction.atomic
     def create(self, user, serializer: OrderWriteSerializer):
         products = serializer.validated_data.pop('products')
-        address = serializer.validated_data.pop('address')
         total_price = 0
-
-        # Get address
-        address = get_object_or_404(Address, id=address)
 
         # Create order
         order = Order.objects.create(
             user=user,
-            address=address.address,
-            address_detail=address.detail,
-            zipcode=address.zipcode,
             request=serializer.validated_data.get('request'),
-            phone=address.phone,
         )
 
         # Create order items
@@ -55,7 +47,7 @@ class OrderService:
         for _product in products:
             # Product, Option 조회
             product = get_object_or_404(Product, id=_product['product'])
-            option = get_object_or_404(ProductOption, name=_product['option'])
+            option = get_object_or_404(ProductOption, name=_product['option'], product=product)
 
             # order.total_price 계산
             total_price += (product.price - int(product.price * product.discount / 100)) * _product['quantity']
@@ -76,4 +68,14 @@ class OrderService:
         order.total_price = total_price
         order.save()
 
-        return order
+    @transaction.atomic
+    def patch(self, user, serializer: OrderPatchSerializer, order_id: int):
+        order = get_object_or_404(Order, id=order_id, user=user)
+        address = get_object_or_404(Address, id=serializer.validated_data.get('address'), user=user)
+
+        order.address = address.address
+        order.address_detail = address.detail
+        order.zipcode = address.zipcode
+        order.phone = address.phone
+
+        order.save()
