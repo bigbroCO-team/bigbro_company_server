@@ -6,6 +6,11 @@ from product.serializers import ProductReadSerializer
 from .models import Order, OrderItem
 
 
+class PGSerializer(serializers.Serializer):
+    payment_key = serializers.CharField(source='paymentKey')
+    order_id = serializers.CharField(source='orderId')
+
+
 class OrderPatchSerializer(serializers.Serializer):
     address = serializers.CharField()
     request = serializers.CharField()
@@ -42,7 +47,7 @@ class OrderReadSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'total_price', 'tracking_number', 'delivery_company',
             'address', 'address_detail', 'zipcode', 'request', 'phone',
-            'items', 'delivery_status'
+            'items', 'delivery_status', 'delivery_cost'
         )
 
     def get_delivery_status(self, obj):
