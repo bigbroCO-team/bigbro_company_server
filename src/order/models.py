@@ -14,11 +14,11 @@ class Order(BaseModel):
     tracking_number = models.CharField(max_length=50, null=True, blank=True)  # 배송 추적 번호
     delivery_company = models.CharField(max_length=50, null=True, blank=True)  # 배송 회사명
 
-    address = models.TextField()  # 주소지
-    address_detail = models.CharField(max_length=50)  # 상세 주소
-    zipcode = models.CharField(max_length=10)  # 우편번호
+    address = models.TextField(null=True)  # 주소지
+    address_detail = models.CharField(max_length=50, null=True)  # 상세 주소
+    zipcode = models.CharField(max_length=10, null=True)  # 우편번호
     request = models.TextField(null=True)  # 배송 요청사항
-    phone = models.CharField(max_length=11)  # 연락처
+    phone = models.CharField(max_length=11, null=True)  # 연락처
 
     # TODO: PG사 결제 연동 시 필요한 필드
 #   paymentkey = models.CharField()
