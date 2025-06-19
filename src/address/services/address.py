@@ -48,7 +48,7 @@ class AddressService:
 
     @transaction.atomic
     def set_default(self, user, address_id: int):
-        get_object_or_404(Address, user=user).update(default=False)
+        get_object_or_404(Address, user=user, id=address_id).update(default=False)
         address = get_object_or_404(Address, id=address_id, user=user)
         address.default = True
         address.save()
