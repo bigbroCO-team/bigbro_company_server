@@ -35,7 +35,7 @@ class OrderItemReadSerializer(serializers.ModelSerializer):
 
 class OrderReadSerializer(serializers.ModelSerializer):
     items = OrderItemReadSerializer(many=True, source='order_item')
-    delivery_status = serializers.SerializerMethodField()
+    delivery_status = serializers.SerializerMethodField(allow_null=True)
 
     class Meta:
         model = Order
@@ -47,7 +47,7 @@ class OrderReadSerializer(serializers.ModelSerializer):
 
     def get_delivery_status(self, obj):
         if not obj.tracking_number:
-            return "배송 준비 중"
+            return None
 
         return requests.get(
             f'{settings.DELIVERY_TRAKER_API}/carriers/kr.logen/tracks/{obj.tracking_number}',
