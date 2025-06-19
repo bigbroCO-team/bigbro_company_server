@@ -39,7 +39,6 @@ class OrderService:
         # Create order
         order = Order.objects.create(
             user=user,
-            request=serializer.validated_data.get('request'),
         )
 
         # Create order items
@@ -77,5 +76,6 @@ class OrderService:
         order.address_detail = address.detail
         order.zipcode = address.zipcode
         order.phone = address.phone
+        order.request = serializer.validated_data.get('request')
 
         order.save()
