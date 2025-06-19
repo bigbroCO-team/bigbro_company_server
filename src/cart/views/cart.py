@@ -8,9 +8,11 @@ from rest_framework.status import HTTP_204_NO_CONTENT
 
 from cart.services.cart import CartService
 from cart.serilaizers import CartReadSerializer, CartWriteSerializer
+from core.authentication import CsrfExemptSessionAuthentication
 
 
 class CartView(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = [IsAuthenticated]
 
     cart_service = CartService()

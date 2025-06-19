@@ -4,11 +4,13 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.permissions import IsAuthenticated
 
+from core.authentication import CsrfExemptSessionAuthentication
 from order.serializers import OrderReadSerializer, OrderWriteSerializer, OrderPatchSerializer
 from order.services.order import OrderService
 
 
 class OrderView(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = [IsAuthenticated]
 
     order_service = OrderService()
@@ -25,6 +27,7 @@ class OrderView(APIView):
 
 
 class OrderDetailView(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = [IsAuthenticated]
 
     order_service = OrderService()

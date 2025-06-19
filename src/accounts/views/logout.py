@@ -5,9 +5,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.services.logout import LogoutService
+from core.authentication import CsrfExemptSessionAuthentication
 
 
 class LogoutView(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = [IsAuthenticated]
 
     logout_service = LogoutService()

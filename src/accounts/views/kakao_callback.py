@@ -5,9 +5,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.services.kakao_callback import KakaoLoginCallbackService
+from core.authentication import CsrfExemptSessionAuthentication
 
 
 class KakaoLoginCallBackView(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication, )
     permission_classes = [AllowAny]
 
     kakao_login_callback_service = KakaoLoginCallbackService()
