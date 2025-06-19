@@ -8,6 +8,7 @@ from .models import Order, OrderItem
 
 class OrderPatchSerializer(serializers.Serializer):
     address = serializers.CharField()
+    request = serializers.CharField()
 
 
 class OrderItemWriteSerializer(serializers.Serializer):
@@ -18,7 +19,6 @@ class OrderItemWriteSerializer(serializers.Serializer):
 
 class OrderWriteSerializer(serializers.Serializer):
     products = OrderItemWriteSerializer(many=True)
-    request = serializers.CharField()
 
 
 class OrderItemReadSerializer(serializers.ModelSerializer):
