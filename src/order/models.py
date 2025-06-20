@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 
 from accounts.models import User
@@ -7,6 +9,8 @@ from product.models import Product, ProductOption
 
 
 class Order(BaseModel):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     total_price = models.PositiveIntegerField(null=True)  # 최종 총합 주문 가격
