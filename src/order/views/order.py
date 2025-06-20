@@ -32,11 +32,11 @@ class OrderDetailView(APIView):
 
     order_service = OrderService()
 
-    def get(self, request: Request, order_id: int) -> Response:
+    def get(self, request: Request, order_id: str) -> Response:
         serializer = OrderReadSerializer(self.order_service.get_my_order_by_id(request.user, order_id))
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def patch(self, request: Request, order_id: int) -> Response:
+    def patch(self, request: Request, order_id: str) -> Response:
         serializer = OrderPatchSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.order_service.patch(user=request.user, serializer=serializer, order_id=order_id)
