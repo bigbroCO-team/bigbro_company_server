@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
@@ -71,7 +73,7 @@ class OrderService:
         order.save()
 
     @transaction.atomic
-    def patch(self, user, serializer: OrderPatchSerializer, order_id: int):
+    def patch(self, user, serializer: OrderPatchSerializer, order_id: UUID):
         order = get_object_or_404(Order, id=order_id, user=user)
         address = get_object_or_404(Address, id=serializer.validated_data.get('address'), user=user)
 

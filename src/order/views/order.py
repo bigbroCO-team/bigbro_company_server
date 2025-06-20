@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -32,11 +34,11 @@ class OrderDetailView(APIView):
 
     order_service = OrderService()
 
-    def get(self, request: Request, order_id: str) -> Response:
+    def get(self, request: Request, order_id: UUID) -> Response:
         serializer = OrderReadSerializer(self.order_service.get_my_order_by_id(request.user, order_id))
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def patch(self, request: Request, order_id: str) -> Response:
+    def patch(self, request: Request, order_id: UUID) -> Response:
         serializer = OrderPatchSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.order_service.patch(user=request.user, serializer=serializer, order_id=order_id)
