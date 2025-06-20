@@ -1,5 +1,6 @@
 import requests
 from django.conf import settings
+from django.db.models import Sum
 from rest_framework import serializers
 
 from product.serializers import ProductReadSerializer
@@ -41,13 +42,14 @@ class OrderItemReadSerializer(serializers.ModelSerializer):
 class OrderReadSerializer(serializers.ModelSerializer):
     items = OrderItemReadSerializer(many=True, source='order_item')
     delivery_status = serializers.SerializerMethodField(allow_null=True)
+    product_total_price = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = (
             'id', 'total_price', 'tracking_number', 'delivery_company',
             'address', 'address_detail', 'zipcode', 'request', 'phone',
-            'items', 'delivery_status', 'delivery_cost'
+            'items', 'delivery_status', 'delivery_cost', 'product_total_price'
         )
 
     def get_delivery_status(self, obj):
@@ -57,3 +59,8 @@ class OrderReadSerializer(serializers.ModelSerializer):
         return requests.get(
             f'{settings.DELIVERY_TRAKER_API}/carriers/kr.logen/tracks/{obj.tracking_number}',
         ).json().get('state').get('text')
+
+    def get_product_total_price(self, obj):
+        return obj.order_item.aggregate(
+            total=Sum('price')
+        ).get('total')
