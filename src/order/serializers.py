@@ -7,11 +7,6 @@ from product.serializers import ProductReadSerializer
 from .models import Order, OrderItem
 
 
-class PGSerializer(serializers.Serializer):
-    payment_key = serializers.CharField(source='paymentKey')
-    order_id = serializers.CharField(source='orderId')
-
-
 class OrderPatchSerializer(serializers.Serializer):
     address = serializers.CharField()
     request = serializers.CharField()

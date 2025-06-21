@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.authentication import CsrfExemptSessionAuthentication
-from order.serializers import PGSerializer
 from order.services.pg import PaymentService
 
 
@@ -16,8 +15,6 @@ class PGView(APIView):
     pg_service = PaymentService()
 
     def get(self, request: Request) -> Response:
-        serializer = PGSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
         self.pg_service.process_payment(
             user=request.user,
             payment_key=request.GET.get('paymentKey'),
