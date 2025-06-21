@@ -20,7 +20,11 @@ class SignupSerializer(serializers.Serializer):
 
 class MyInfoSerializer(serializers.ModelSerializer):
     address = AddressSerializer(many=True)
+    role = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'address')
+        fields = ('id', 'email', 'address', 'role')
+
+    def get_role(self, obj):
+        return "STAFF" if obj.is_staff else "USER"
