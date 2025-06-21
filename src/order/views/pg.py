@@ -1,14 +1,27 @@
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from core.authentication import CsrfExemptSessionAuthentication
+from order.serializers import PGSerializer
+from order.services.pg import PaymentService
 
 
 class PGView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication, )
     permission_classes = (IsAuthenticated, )
 
+    pg_service = PaymentService()
+
     def get(self, request: Request) -> Response:
-        pass
+        serializer = PGSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.pg_service.process_payment(
+            user=request.user,
+            payment_key=request.GET.get('paymentKey'),
+            order_id=request.GET.get('orderId'),
+            amount=request.GET.get('amount')
+        )
+        return Response(status=status.HTTP_200_OK)

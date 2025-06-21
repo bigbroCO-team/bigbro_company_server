@@ -160,3 +160,5 @@ KAKAO_API_KEY = os.environ.get('KAKAO_API_KEY')
 KAKAO_CLIENT_SECRET = os.environ.get('KAKAO_CLIENT_SECRET')
 
 DELIVERY_TRAKER_API = os.environ.get('DELIVERY_TRAKER_API', 'https://apis.tracker.delivery')
+
+TOSS_SECRET_KEY = os.environ.get('TOSS_SECRET_KEY')
