@@ -25,9 +25,7 @@ class Order(BaseModel):
     request = models.TextField(null=True)  # 배송 요청사항
     phone = models.CharField(max_length=11, null=True)  # 연락처
 
-    # TODO: PG사 결제 연동 시 필요한 필드
-#   paymentkey = models.CharField()
-#   orderid = models.CharField()
+    paymentkey = models.CharField(null=True)
 
     class Meta:
         db_table = 'order'
