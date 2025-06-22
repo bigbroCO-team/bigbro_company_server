@@ -33,6 +33,9 @@ class OrderService:
     def get_my_order_list(self, user):
         return self.order.objects.filter(user=user).prefetch_related('order_item')
 
+    def get_all_order_list(self):
+        return self.order.objects.all().prefetch_related('order_item')
+
     @transaction.atomic
     def create(self, user, serializer: OrderWriteSerializer):
         products = serializer.validated_data.pop('products')
