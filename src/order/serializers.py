@@ -28,7 +28,7 @@ class OrderItemReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
-        fields = ('id', 'product', 'product_option', 'quantity', 'status', 'price')
+        fields = ('id', 'product', 'product_option', 'quantity', 'price')
 
     def get_product_option(self, obj):
         return obj.product_option.name if obj.product_option else None
@@ -44,7 +44,7 @@ class OrderReadSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'total_price', 'tracking_number', 'delivery_company',
             'address', 'address_detail', 'zipcode', 'request', 'phone',
-            'items', 'delivery_status', 'delivery_cost', 'product_total_price'
+            'items', 'delivery_status', 'delivery_cost', 'product_total_price', 'status'
         )
 
     def get_delivery_status(self, obj):

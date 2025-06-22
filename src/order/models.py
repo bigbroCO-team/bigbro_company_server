@@ -15,15 +15,24 @@ class Order(BaseModel):
 
     total_price = models.PositiveIntegerField(null=True)  # 최종 총합 주문 가격
 
+    # 배송 관련 info
     tracking_number = models.CharField(max_length=50, null=True, blank=True)  # 배송 추적 번호
     delivery_company = models.CharField(max_length=50, null=True, blank=True)  # 배송 회사명
     delivery_cost = models.PositiveIntegerField(default=3000)  # 배송비
 
+    # 배송지 정보
     address = models.TextField(null=True)  # 주소지
     address_detail = models.CharField(max_length=50, null=True)  # 상세 주소
     zipcode = models.CharField(max_length=10, null=True)  # 우편번호
     request = models.TextField(null=True)  # 배송 요청사항
     phone = models.CharField(max_length=11, null=True)  # 연락처
+
+    # 주문 상태
+    status = models.CharField(
+        choices=OrderItemStatus.choices,
+        max_length=16,
+        default=OrderItemStatus.STAGING
+    )
 
     paymentkey = models.CharField(null=True)
 
@@ -41,13 +50,6 @@ class OrderItem(BaseModel):
 
     quantity = models.PositiveSmallIntegerField()  # 수량
     price = models.PositiveIntegerField(null=True, blank=False)  # 확정 가격
-
-    # order item 상태
-    status = models.CharField(
-        choices=OrderItemStatus.choices,
-        max_length=16,
-        default=OrderItemStatus.STAGING
-    )
     
     class Meta:
         db_table = 'order_item'
