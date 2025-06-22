@@ -15,8 +15,14 @@ class ProductView(APIView):
     product_service = ProductService()
     
     def get(self, request: Request) -> Response:
-        return Response(ProductReadSerializer(
-            self.product_service.get_product_list(brand_name=request.GET.get('brand')),many=True).data,
+        brand = request.GET.get('brand')
+        if request.user.is_staff:
+            products = self.product_service.get_on_product_list(brand_name=brand)
+        else:
+            products = self.product_service.get_all_product_list(brand_name=brand)
+
+        return Response(
+            ProductReadSerializer(products, many=True).data,
             status=status.HTTP_200_OK
         )
 

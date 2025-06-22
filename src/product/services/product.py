@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
+from product.enums import ProductStatus
 from product.exceptions import InvalidProductQueryException
 from product.models import Product, ProductOption, ProductImage
 from product.serializers import ProductWriteSerializer
@@ -17,7 +18,13 @@ class ProductService:
         self.product_option = product_option
         self.product_image = product_image
 
-    def get_product_list(self, brand_name: str = None):
+    def get_on_product_list(self, brand_name: str = None):
+        if brand_name:
+            return self.product.objects.filter(brand=brand_name, stauts=ProductStatus.ON).prefetch_related('image', 'option')
+        else:
+            return self.product.objects.filter(stauts=ProductStatus.ON).prefetch_related('image', 'option')
+
+    def get_all_product_list(self, brand_name: str = None):
         if brand_name:
             return self.product.objects.filter(brand=brand_name).prefetch_related('image', 'option')
         else:
