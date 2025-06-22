@@ -18,7 +18,10 @@ class ProductService:
         self.product_image = product_image
 
     def get_product_list(self, brand_name: str = None):
-        return self.product.objects.filter(brand=brand_name).prefetch_related('image', 'option')
+        if brand_name:
+            return self.product.objects.filter(brand=brand_name).prefetch_related('image', 'option')
+        else:
+            return self.product.objects.all().prefetch_related('image', 'option')
 
     def get_product_by_id(self, product_id: int = None):
         return self.product.objects.filter(id=product_id).prefetch_related('image', 'option').first()
