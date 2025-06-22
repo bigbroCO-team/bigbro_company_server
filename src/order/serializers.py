@@ -31,7 +31,7 @@ class OrderItemReadSerializer(serializers.ModelSerializer):
         fields = ('id', 'product', 'product_option', 'quantity', 'status', 'price')
 
     def get_product_option(self, obj):
-        return obj.product_option.name
+        return obj.product_option.name if obj.product_option else None
 
 
 class OrderReadSerializer(serializers.ModelSerializer):
