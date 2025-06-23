@@ -21,4 +21,7 @@ class PGView(APIView):
             order_id=request.GET.get('orderId'),
             amount=request.GET.get('amount')
         )
-        return Response(status=status.HTTP_200_OK)
+        return Response(
+            headers={'Location': 'https://www.bigbro.company/success'},
+            status=status.HTTP_302_FOUND
+        )
