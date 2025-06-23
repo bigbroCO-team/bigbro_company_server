@@ -66,9 +66,14 @@ class OrderReadSerializer(serializers.ModelSerializer):
         if not obj.tracking_number:
             return None
 
-        return requests.get(
+        response = requests.get(
             f'{settings.DELIVERY_TRAKER_API}/carriers/kr.logen/tracks/{obj.tracking_number}',
-        ).json().get('state').get('text')
+        )
+
+        if response.status_code == 200:
+            return response.json().get('state').get('text')
+        else:
+            return None
 
     def get_product_total_price(self, obj):
         return obj.order_item.aggregate(
