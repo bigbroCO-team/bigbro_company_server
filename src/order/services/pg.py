@@ -55,7 +55,7 @@ class PaymentService:
             order.paymentkey = payment_key
             order.save()
 
-            OrderItem.objects.filter(order=order).update(status=OrderStatus.PURCHASED)
+            Order.objects.filter(id=order.id).update(status=OrderStatus.PURCHASED)
 
         else:
             raise APIException(detail=response.json(), code=response.status_code)
