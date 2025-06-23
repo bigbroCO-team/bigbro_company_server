@@ -80,9 +80,10 @@ class OrderService:
         order = get_object_or_404(Order, id=order_id, user=user)
         address = get_object_or_404(Address, id=serializer.validated_data.get('address'), user=user)
 
+        order.name = address.name
+        order.zipcode = address.zipcode
         order.address = address.address
         order.address_detail = address.detail
-        order.zipcode = address.zipcode
         order.phone = address.phone
         order.request = serializer.validated_data.get('request')
 
