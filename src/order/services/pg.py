@@ -46,7 +46,7 @@ class PaymentService:
             },
             data={
                 'orderId': order_id,
-                'amount': order.total_price,
+                'amount': int(order.total_price),
                 'paymentKey': payment_key,
             }
         )
