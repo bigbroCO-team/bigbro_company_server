@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class OrderItemStatus(models.TextChoices):
+class OrderStatus(models.TextChoices):
     STAGING = 'STAGING'
     PURCHASED = 'PURCHASED'
     PREPARE_SHIP = 'PREPARING'

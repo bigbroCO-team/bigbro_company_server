@@ -4,7 +4,7 @@ from django.db import models
 
 from accounts.models import User
 from core.basemodel import BaseModel
-from order.enums import OrderItemStatus
+from order.enums import OrderStatus
 from product.models import Product, ProductOption
 
 
@@ -31,9 +31,9 @@ class Order(BaseModel):
 
     # 주문 상태
     status = models.CharField(
-        choices=OrderItemStatus.choices,
+        choices=OrderStatus.choices,
         max_length=16,
-        default=OrderItemStatus.STAGING
+        default=OrderStatus.STAGING
     )
 
     paymentkey = models.CharField(null=True)

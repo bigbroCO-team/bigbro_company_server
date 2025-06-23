@@ -1,9 +1,11 @@
 from uuid import UUID
 
 from django.db import transaction
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
 from address.models import Address
+from order.enums import OrderStatus
 from order.exceptions import OrderNotFoundException
 from order.models import Order, OrderItem
 from order.serializers import OrderWriteSerializer, OrderPatchSerializer
@@ -34,7 +36,9 @@ class OrderService:
         return self.order.objects.filter(user=user).prefetch_related('order_item')
 
     def get_all_order_list(self):
-        return self.order.objects.filter(address__isnull=False).prefetch_related('order_item')
+        return self.order.objects.filter(
+            ~Q(status=OrderStatus.STAGING)
+        ).prefetch_related('order_item')
 
     @transaction.atomic
     def create(self, user, serializer: OrderWriteSerializer):
