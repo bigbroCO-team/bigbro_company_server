@@ -15,7 +15,8 @@ from order.models import Order, OrderItem
 class PaymentService:
     @staticmethod
     def get_encrypted_secret_key():
-        key = base64.b64encode(settings.TOSS_SECRET_KEY + ":")
+        key_string = settings.TOSS_SECRET_KEY + ":"
+        key = base64.b64encode(key_string.encode('utf-8')).decode('utf-8')
         return f'Basic {key}'
 
     @transaction.atomic
