@@ -44,8 +44,8 @@ class PaymentService:
                 'Authorization': PaymentService.get_encrypted_secret_key(),
                 'Content-Type': 'application/json'
             },
-            data={
-                'orderId': order_id,
+            json={
+                'orderId': str(order_id),
                 'amount': int(order.total_price),
                 'paymentKey': payment_key,
             }
