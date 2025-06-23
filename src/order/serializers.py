@@ -4,6 +4,7 @@ from django.db.models import Sum
 from rest_framework import serializers
 
 from product.serializers import ProductReadSerializer
+from .enums import OrderStatus
 from .models import Order, OrderItem
 
 
@@ -83,3 +84,11 @@ class OrderReadSerializer(serializers.ModelSerializer):
             'address_detail': obj.address_detail,
             'request': obj.request
         }).data
+
+
+class OrderStatusPatchSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(choices=OrderStatus.choices)
+
+
+class OrderDeliveryNumberPatchSerializer(serializers.Serializer):
+    tracking_number = serializers.CharField(allow_null=True)
