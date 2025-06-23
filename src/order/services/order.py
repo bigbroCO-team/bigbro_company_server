@@ -8,7 +8,8 @@ from address.models import Address
 from order.enums import OrderStatus
 from order.exceptions import OrderNotFoundException
 from order.models import Order, OrderItem
-from order.serializers import OrderWriteSerializer, OrderPatchSerializer
+from order.serializers import OrderWriteSerializer, OrderPatchSerializer, OrderDeliveryNumberPatchSerializer, \
+    OrderStatusPatchSerializer
 from product.models import Product, ProductOption
 
 
@@ -91,4 +92,16 @@ class OrderService:
         order.phone = address.phone
         order.request = serializer.validated_data.get('request')
 
+        order.save()
+
+    @transaction.atomic
+    def patch_delivery_info(self, order_id: UUID, serializer: OrderDeliveryNumberPatchSerializer):
+        order = get_object_or_404(Order, id=order_id)
+        order.tracking_number = serializer.validated_data.get('tracking_number')
+        order.save()
+
+    @transaction.atomic
+    def patch_status(self, order_id: UUID, serializer: OrderStatusPatchSerializer):
+        order = get_object_or_404(Order, id=order_id)
+        order.status = serializer.validated_data.get('status')
         order.save()
