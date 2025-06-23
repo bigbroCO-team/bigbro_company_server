@@ -34,17 +34,31 @@ class OrderItemReadSerializer(serializers.ModelSerializer):
         return obj.product_option.name if obj.product_option else None
 
 
+class OrderReadAddressSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    phone = serializers.CharField()
+    zipcode = serializers.CharField()
+    address = serializers.CharField()
+    address_detail = serializers.CharField()
+    request = serializers.CharField(allow_blank=True)
+
+
 class OrderReadSerializer(serializers.ModelSerializer):
     items = OrderItemReadSerializer(many=True, source='order_item')
     delivery_status = serializers.SerializerMethodField(allow_null=True)
     product_total_price = serializers.SerializerMethodField()
+    address = serializers.SerializerMethodField()
 
     class Meta:
         model = Order
         fields = (
-            'id', 'total_price', 'tracking_number', 'delivery_company',
-            'address', 'address_detail', 'zipcode', 'request', 'phone',
-            'items', 'delivery_status', 'delivery_cost', 'product_total_price', 'status'
+            'id', 'total_price',
+            'tracking_number', 'delivery_company', 'delivery_cost',
+            'status', 'receipt_url',
+
+            'items', 'delivery_status', 'product_total_price', 'address',
+
+            'created_at'
         )
 
     def get_delivery_status(self, obj):
@@ -59,3 +73,13 @@ class OrderReadSerializer(serializers.ModelSerializer):
         return obj.order_item.aggregate(
             total=Sum('price')
         ).get('total')
+
+    def get_address(self, obj):
+        return OrderReadAddressSerializer({
+            'name': obj.name,
+            'phone': obj.phone,
+            'zipcode': obj.zipcode,
+            'address': obj.address,
+            'address_detail': obj.address_detail,
+            'request': obj.request
+        }).data

@@ -21,9 +21,11 @@ class Order(BaseModel):
     delivery_cost = models.PositiveIntegerField(default=3000)  # 배송비
 
     # 배송지 정보
+    name = models.CharField(max_length=17)  # 수령인 이름
+    phone = models.CharField(max_length=11)  # 수령인 연락처
+    zipcode = models.CharField(max_length=10, null=True)  # 우편번호
     address = models.TextField(null=True)  # 주소지
     address_detail = models.CharField(max_length=50, null=True)  # 상세 주소
-    zipcode = models.CharField(max_length=10, null=True)  # 우편번호
     request = models.TextField(null=True)  # 배송 요청사항
     phone = models.CharField(max_length=11, null=True)  # 연락처
 
@@ -35,6 +37,7 @@ class Order(BaseModel):
     )
 
     paymentkey = models.CharField(null=True)
+    receipt_url = models.CharField(null=True)
 
     class Meta:
         db_table = 'order'
