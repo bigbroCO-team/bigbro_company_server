@@ -29,7 +29,7 @@ class PaymentService:
         if order.paymentkey:
             raise AlreadyPaidException()
 
-        if not order.total_price == amount:
+        if not int(order.total_price) == int(amount):
             raise InvalidAmountException(
                 f"total_price: {order.total_price}, amount: {amount} is not correct"
             )
