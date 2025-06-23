@@ -11,3 +11,15 @@ class InvalidAmountException(APIException):
     status_code = 400
     default_detail = 'Invalid Amount'
     default_code = 'invalid_amount'
+
+
+class AlreadyPaidException(APIException):
+    status_code = 400
+    default_detail = 'Order Already Paid'
+    default_code = 'order_already_paid'
+
+
+class InvalidOrderStatusException(APIException):
+    status_code = 400
+    default_detail = 'Invalid Order Status'
+    default_code = 'invalid_order_status'

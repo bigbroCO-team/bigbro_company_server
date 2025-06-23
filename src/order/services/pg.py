@@ -3,11 +3,12 @@ import base64
 import requests
 
 from django.conf import settings
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import APIException
 
 from order.enums import OrderStatus
-from order.exceptions import InvalidAmountException
+from order.exceptions import InvalidAmountException, AlreadyPaidException, InvalidOrderStatusException
 from order.models import Order, OrderItem
 
 
@@ -17,6 +18,7 @@ class PaymentService:
         key = base64.b64encode(settings.TOSS_SECRET_KEY + ":")
         return f'Basic {key}'
 
+    @transaction.atomic
     def process_payment(self, user, payment_key, order_id, amount):
         order = get_object_or_404(
             Order,
@@ -24,8 +26,16 @@ class PaymentService:
             user=user
         )
 
+        if order.paymentkey:
+            raise AlreadyPaidException()
+
         if not order.total_price == amount:
-            raise InvalidAmountException()
+            raise InvalidAmountException(
+                f"total_price: {order.total_price}, amount: {amount} is not correct"
+            )
+
+        if not order.status == OrderStatus.STAGING:
+            raise InvalidOrderStatusException()
 
         response = requests.post(
             url="https://api.tosspayments.com/v1/payments/confirm",
