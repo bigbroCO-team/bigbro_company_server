@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -21,20 +22,37 @@ class AddressViewSet(ViewSet):
         serializer = self.serializer_class(addresses, many=True)
         return Response(serializer.data)
 
+    def retrieve(self, request: Request, pk: int) -> Response:
+        address = get_object_or_404(Address, id=pk, user=request.user)
+        serializer = self.serializer_class(address)
+        return Response(serializer.data)
+
     @transaction.atomic
     def create(self, request: Request) -> Response:
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(user=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def retrieve(self, request: Request, address_id: int) -> Response:
-        address = get_object_or_404(Address, id=address_id, user=request.user)
-        serializer = self.serializer_class(address)
-        return Response(serializer.data)
+        return Response(status=status.HTTP_201_CREATED)
 
     @transaction.atomic
-    def destroy(self, request: Request, address_id: int) -> Response:
-        address = get_object_or_404(Address, id=address_id, user=request.user)
+    def update(self, request: Request, pk: int) -> Response:
+        address = get_object_or_404(Address, id=pk, user=request.user)
+        serializer = self.serializer_class(address, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response()
+
+    @transaction.atomic
+    def destroy(self, request: Request, pk: int) -> Response:
+        address = get_object_or_404(Address, id=pk, user=request.user)
         address.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(url_path="default", methods=["get"], detail=False)
+    def get_default(self, request: Request) -> Response:
+        pass
+
+    @action(url_path="default/<int:pk>", methods=["post"], detail=False)
+    @transaction.atomic
+    def set_default(self, request: Request, pk: int) -> Response:
+        pass
