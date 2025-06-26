@@ -38,8 +38,8 @@ class Order(BaseModel):
         choices=OrderStatus.choices, max_length=16, default=OrderStatus.STAGING
     )
 
-    paymentkey = models.CharField(null=True)
-    receipt_url = models.CharField(null=True)
+    paymentkey = models.CharField(null=True, max_length=300)
+    receipt_url = models.CharField(null=True, max_length=300)
 
     class Meta:
         db_table = "order"
