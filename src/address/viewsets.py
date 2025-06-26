@@ -13,8 +13,8 @@ from core.authentication import CsrfExemptSessionAuthentication
 
 class AddressViewSet(ViewSet):
     serializer_class = AddressSerializer
-    authentication_classes = (CsrfExemptSessionAuthentication, )
-    permission_classes = (IsAuthenticated, )
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def list(self, request: Request) -> Response:
         addresses = Address.objects.filter(user=request.user)

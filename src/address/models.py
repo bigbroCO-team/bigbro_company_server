@@ -24,10 +24,14 @@ class Address(BaseModel):
 
     def clean(self):
         if self.default:
-            address_default = Address.objects.filter(
-                user=self.user,
-                default=True,
-            ).exclude(id=self.id).exists()
+            address_default = (
+                Address.objects.filter(
+                    user=self.user,
+                    default=True,
+                )
+                .exclude(id=self.id)
+                .exists()
+            )
 
             if address_default:
                 raise AddressTooManyDefaultFieldException()
