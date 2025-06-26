@@ -13,8 +13,7 @@ class LoginSerializer(serializers.Serializer):
 class SignupSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=30)
     password = serializers.CharField(
-        write_only=True,
-        validators=[MinLengthValidator(6)]
+        write_only=True, validators=[MinLengthValidator(6)]
     )
 
 
@@ -24,7 +23,7 @@ class MyInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'address', 'role')
+        fields = ("id", "email", "address", "role")
 
     def get_role(self, obj):
         return "STAFF" if obj.is_staff else "USER"

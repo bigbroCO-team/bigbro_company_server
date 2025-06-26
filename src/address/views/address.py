@@ -16,11 +16,13 @@ class AddressView(APIView):
     address_service = AddressService()
 
     def get(self, request: Request) -> Response:
-        return Response(AddressSerializer(
-            self.address_service.get_my_address(user=request.user), many=True).data,
-            status=status.HTTP_200_OK
+        return Response(
+            AddressSerializer(
+                self.address_service.get_my_address(user=request.user), many=True
+            ).data,
+            status=status.HTTP_200_OK,
         )
-    
+
     def post(self, request: Request) -> Response:
         serializer = AddressSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -35,15 +37,21 @@ class AddressDetailView(APIView):
     address_service = AddressService()
 
     def get(self, request: Request, address_id: int) -> Response:
-        return Response(AddressSerializer(
-            self.address_service.get_address_by_id(user=request.user, address_id=address_id)).data,
-            status=status.HTTP_200_OK
+        return Response(
+            AddressSerializer(
+                self.address_service.get_address_by_id(
+                    user=request.user, address_id=address_id
+                )
+            ).data,
+            status=status.HTTP_200_OK,
         )
 
     def put(self, request: Request, address_id: int) -> Response:
         serializer = AddressSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.address_service.update(user=request.user, address_id=address_id, serializer=serializer)
+        self.address_service.update(
+            user=request.user, address_id=address_id, serializer=serializer
+        )
         return Response(status=status.HTTP_200_OK)
 
     def delete(self, request: Request, address_id: int) -> Response:

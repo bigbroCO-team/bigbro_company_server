@@ -8,7 +8,11 @@ from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import APIException
 
 from order.enums import OrderStatus
-from order.exceptions import InvalidAmountException, AlreadyPaidException, InvalidOrderStatusException
+from order.exceptions import (
+    InvalidAmountException,
+    AlreadyPaidException,
+    InvalidOrderStatusException,
+)
 from order.models import Order, OrderItem
 
 
@@ -16,16 +20,12 @@ class PaymentService:
     @staticmethod
     def get_encrypted_secret_key():
         key_string = settings.TOSS_SECRET_KEY + ":"
-        key = base64.b64encode(key_string.encode('utf-8')).decode('utf-8')
-        return f'Basic {key}'
+        key = base64.b64encode(key_string.encode("utf-8")).decode("utf-8")
+        return f"Basic {key}"
 
     @transaction.atomic
     def process_payment(self, user, payment_key, order_id, amount):
-        order = get_object_or_404(
-            Order,
-            id=order_id,
-            user=user
-        )
+        order = get_object_or_404(Order, id=order_id, user=user)
 
         if order.paymentkey:
             raise AlreadyPaidException()
@@ -41,14 +41,14 @@ class PaymentService:
         response = requests.post(
             url="https://api.tosspayments.com/v1/payments/confirm",
             headers={
-                'Authorization': PaymentService.get_encrypted_secret_key(),
-                'Content-Type': 'application/json'
+                "Authorization": PaymentService.get_encrypted_secret_key(),
+                "Content-Type": "application/json",
             },
             json={
-                'orderId': str(order_id),
-                'amount': int(order.total_price),
-                'paymentKey': payment_key,
-            }
+                "orderId": str(order_id),
+                "amount": int(order.total_price),
+                "paymentKey": payment_key,
+            },
         )
 
         if response.status_code == 200:

@@ -16,9 +16,11 @@ class DefaultAddressView(APIView):
     address_service = AddressService()
 
     def get(self, request: Request) -> Response:
-        return Response(AddressSerializer(
-            self.address_service.get_default_address(request.user)).data,
-            status=status.HTTP_200_OK
+        return Response(
+            AddressSerializer(
+                self.address_service.get_default_address(request.user)
+            ).data,
+            status=status.HTTP_200_OK,
         )
 
     def post(self, request: Request, address_id: int) -> Response:

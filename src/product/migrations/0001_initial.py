@@ -9,51 +9,121 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('brand', models.CharField(choices=[('BIGBRO', 'Bigbro'), ('S.C.B', 'Scb'), ('SCULFEE', 'Sculfee'), ('GONGNEWGI', 'Gongnewgi'), ('CBWAS', 'Cbwas')], max_length=9)),
-                ('name', models.CharField(max_length=30)),
-                ('description', models.TextField()),
-                ('price', models.PositiveIntegerField()),
-                ('discount', models.FloatField()),
-                ('status', models.CharField(choices=[('ON', 'On'), ('OFF', 'Off'), ('EMPTY', 'Empty')], max_length=5)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        db_index=True, default=django.utils.timezone.now
+                    ),
+                ),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "brand",
+                    models.CharField(
+                        choices=[
+                            ("BIGBRO", "Bigbro"),
+                            ("S.C.B", "Scb"),
+                            ("SCULFEE", "Sculfee"),
+                            ("GONGNEWGI", "Gongnewgi"),
+                            ("CBWAS", "Cbwas"),
+                        ],
+                        max_length=9,
+                    ),
+                ),
+                ("name", models.CharField(max_length=30)),
+                ("description", models.TextField()),
+                ("price", models.PositiveIntegerField()),
+                ("discount", models.FloatField()),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[("ON", "On"), ("OFF", "Off"), ("EMPTY", "Empty")],
+                        max_length=5,
+                    ),
+                ),
             ],
             options={
-                'db_table': 'product',
+                "db_table": "product",
             },
         ),
         migrations.CreateModel(
-            name='ProductImage',
+            name="ProductImage",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('url', models.URLField()),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='image', to='product.product')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        db_index=True, default=django.utils.timezone.now
+                    ),
+                ),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("url", models.URLField()),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="image",
+                        to="product.product",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'product_image',
+                "db_table": "product_image",
             },
         ),
         migrations.CreateModel(
-            name='ProductOption',
+            name="ProductOption",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('name', models.CharField(max_length=30)),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='option', to='product.product')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        db_index=True, default=django.utils.timezone.now
+                    ),
+                ),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("name", models.CharField(max_length=30)),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="option",
+                        to="product.product",
+                    ),
+                ),
             ],
             options={
-                'db_table': 'product_option',
+                "db_table": "product_option",
             },
         ),
     ]

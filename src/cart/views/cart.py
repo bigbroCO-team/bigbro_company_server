@@ -18,18 +18,20 @@ class CartView(APIView):
     cart_service = CartService()
 
     def get(self, request: Request) -> Response:
-        return Response(CartReadSerializer(
-            self.cart_service.get_my_cart_list(user=request.user), many=True).data,
-            status=status.HTTP_200_OK
+        return Response(
+            CartReadSerializer(
+                self.cart_service.get_my_cart_list(user=request.user), many=True
+            ).data,
+            status=status.HTTP_200_OK,
         )
-    
+
     @transaction.atomic
     def post(self, request: Request) -> Response:
         serializer = CartWriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.cart_service.save(user=request.user, serializer=serializer)
         return Response(status=status.HTTP_201_CREATED)
-    
+
     @transaction.atomic
     def delete(self, request: Request, cart_id: int) -> Response:
         self.cart_service.delete(user=request.user, cart_id=cart_id)

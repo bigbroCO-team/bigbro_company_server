@@ -6,17 +6,29 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('order', '0002_order_paymentkey'),
+        ("order", "0002_order_paymentkey"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='orderitem',
-            name='status',
+            model_name="orderitem",
+            name="status",
         ),
         migrations.AddField(
-            model_name='order',
-            name='status',
-            field=models.CharField(choices=[('STAGING', 'Staging'), ('PURCHASED', 'Purchased'), ('PREPARING', 'Prepare Ship'), ('START_SHIP', 'Start Ship'), ('IN_SHIP', 'In Ship'), ('DELIVERED', 'Delivered'), ('COMPLETED', 'Completed')], default='STAGING', max_length=16),
+            model_name="order",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("STAGING", "Staging"),
+                    ("PURCHASED", "Purchased"),
+                    ("PREPARING", "Prepare Ship"),
+                    ("START_SHIP", "Start Ship"),
+                    ("IN_SHIP", "In Ship"),
+                    ("DELIVERED", "Delivered"),
+                    ("COMPLETED", "Completed"),
+                ],
+                default="STAGING",
+                max_length=16,
+            ),
         ),
     ]

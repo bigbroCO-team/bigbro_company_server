@@ -13,17 +13,16 @@ class ProductView(APIView):
     permission_classes = [IsStaffOrReadOnly]
 
     product_service = ProductService()
-    
+
     def get(self, request: Request) -> Response:
-        brand = request.GET.get('brand')
+        brand = request.GET.get("brand")
         if request.user.is_staff:
             products = self.product_service.get_on_product_list(brand_name=brand)
         else:
             products = self.product_service.get_all_product_list(brand_name=brand)
 
         return Response(
-            ProductReadSerializer(products, many=True).data,
-            status=status.HTTP_200_OK
+            ProductReadSerializer(products, many=True).data, status=status.HTTP_200_OK
         )
 
     def post(self, request: Request) -> Response:
@@ -40,9 +39,11 @@ class ProductDetailView(APIView):
     product_service = ProductService()
 
     def get(self, request: Request, product_id: int = None) -> Response:
-        return Response(ProductReadSerializer(
-            self.product_service.get_product_by_id(product_id=product_id)).data,
-            status=status.HTTP_200_OK
+        return Response(
+            ProductReadSerializer(
+                self.product_service.get_product_by_id(product_id=product_id)
+            ).data,
+            status=status.HTTP_200_OK,
         )
 
     def put(self, request: Request, product_id: int) -> Response:

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="15.164.48.179" id="a06c66de-47a8-4b99-92d8-bad455a073d2" keyPath="$USER_HOME$/aws/bigbro/bigbro.pam" port="22" customName="ubuntu@54.180.152.76:22 key2" nameFormat="CUSTOM" username="ubuntu" useOpenSSHConfig="true">
+        <option name="customName" value="ubuntu@54.180.152.76:22 key2" />
+      </sshConfig>
+      <sshConfig host="15.164.48.179" id="298dc62f-cf31-4062-9786-c9ac7f91010f" keyPath="$USER_HOME$/aws/bigbro/bigbro.pem" port="22" customName="ubuntu@54.180.152.76:22 key3" nameFormat="CUSTOM" username="ubuntu" useOpenSSHConfig="true">
+        <option name="customName" value="ubuntu@54.180.152.76:22 key3" />
+      </sshConfig>
+      <sshConfig host="15.164.48.179" id="a0b57e44-60a1-4364-8b43-a50f300d761b" keyPath="$USER_HOME$/aws/bigbro/bigbro.pem" port="22" customName="ubuntu@54.180.152.76:22 key4" nameFormat="CUSTOM" username="ubuntu" useOpenSSHConfig="true">
+        <option name="customName" value="ubuntu@54.180.152.76:22 key4" />
+      </sshConfig>
+    </configs>
+  </component>
+</project>

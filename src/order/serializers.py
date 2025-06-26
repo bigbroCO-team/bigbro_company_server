@@ -29,7 +29,7 @@ class OrderItemReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
-        fields = ('id', 'product', 'product_option', 'quantity', 'price')
+        fields = ("id", "product", "product_option", "quantity", "price")
 
     def get_product_option(self, obj):
         return obj.product_option.name if obj.product_option else None
@@ -45,7 +45,7 @@ class OrderReadAddressSerializer(serializers.Serializer):
 
 
 class OrderReadSerializer(serializers.ModelSerializer):
-    items = OrderItemReadSerializer(many=True, source='order_item')
+    items = OrderItemReadSerializer(many=True, source="order_item")
     delivery_status = serializers.SerializerMethodField(allow_null=True)
     product_total_price = serializers.SerializerMethodField()
     address = serializers.SerializerMethodField()
@@ -53,13 +53,18 @@ class OrderReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = (
-            'id', 'total_price',
-            'tracking_number', 'delivery_company', 'delivery_cost',
-            'status', 'receipt_url',
-
-            'items', 'delivery_status', 'product_total_price', 'address',
-
-            'created_at'
+            "id",
+            "total_price",
+            "tracking_number",
+            "delivery_company",
+            "delivery_cost",
+            "status",
+            "receipt_url",
+            "items",
+            "delivery_status",
+            "product_total_price",
+            "address",
+            "created_at",
         )
 
     def get_delivery_status(self, obj):
@@ -67,28 +72,28 @@ class OrderReadSerializer(serializers.ModelSerializer):
             return None
 
         response = requests.get(
-            f'{settings.DELIVERY_TRAKER_API}/carriers/kr.logen/tracks/{obj.tracking_number}',
+            f"{settings.DELIVERY_TRAKER_API}/carriers/kr.logen/tracks/{obj.tracking_number}",
         )
 
         if response.status_code == 200:
-            return response.json().get('state').get('text')
+            return response.json().get("state").get("text")
         else:
             return None
 
     def get_product_total_price(self, obj):
-        return obj.order_item.aggregate(
-            total=Sum('price')
-        ).get('total')
+        return obj.order_item.aggregate(total=Sum("price")).get("total")
 
     def get_address(self, obj):
-        return OrderReadAddressSerializer({
-            'name': obj.name,
-            'phone': obj.phone,
-            'zipcode': obj.zipcode,
-            'address': obj.address,
-            'address_detail': obj.address_detail,
-            'request': obj.request
-        }).data
+        return OrderReadAddressSerializer(
+            {
+                "name": obj.name,
+                "phone": obj.phone,
+                "zipcode": obj.zipcode,
+                "address": obj.address,
+                "address_detail": obj.address_detail,
+                "request": obj.request,
+            }
+        ).data
 
 
 class OrderStatusPatchSerializer(serializers.Serializer):

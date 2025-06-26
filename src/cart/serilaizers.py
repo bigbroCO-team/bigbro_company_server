@@ -13,7 +13,7 @@ class CartReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ('product', 'option', 'count')
+        fields = ("product", "option", "count")
 
 
 class CartWriteSerializer(serializers.ModelSerializer):
@@ -23,8 +23,8 @@ class CartWriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ('product', 'option', 'count')
-    
+        fields = ("product", "option", "count")
+
     def validate_product(self, value):
         if not value.status == ProductStatus.ON:
             raise ProductIsNotOnSaleException()

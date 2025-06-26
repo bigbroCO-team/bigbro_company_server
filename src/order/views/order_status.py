@@ -12,16 +12,13 @@ from order.services.order import OrderService
 
 
 class OrderStatusPatchView(APIView):
-    authentication_classes = (CsrfExemptSessionAuthentication, )
-    permission_classes = (IsAdminUser, )
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    permission_classes = (IsAdminUser,)
 
     order_service = OrderService()
 
     def patch(self, request: Request, order_id: UUID) -> Response:
         serializer = OrderStatusPatchSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.order_service.patch_status(
-            order_id=order_id,
-            serializer=serializer
-        )
+        self.order_service.patch_status(order_id=order_id, serializer=serializer)
         return Response(status=status.HTTP_200_OK)

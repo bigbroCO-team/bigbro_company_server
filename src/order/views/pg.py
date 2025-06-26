@@ -9,19 +9,19 @@ from order.services.pg import PaymentService
 
 
 class PGView(APIView):
-    authentication_classes = (CsrfExemptSessionAuthentication, )
-    permission_classes = (IsAuthenticated, )
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     pg_service = PaymentService()
 
     def get(self, request: Request) -> Response:
         self.pg_service.process_payment(
             user=request.user,
-            payment_key=request.GET.get('paymentKey'),
-            order_id=request.GET.get('orderId'),
-            amount=request.GET.get('amount')
+            payment_key=request.GET.get("paymentKey"),
+            order_id=request.GET.get("orderId"),
+            amount=request.GET.get("amount"),
         )
         return Response(
-            headers={'Location': 'https://www.bigbro.company/success'},
-            status=status.HTTP_302_FOUND
+            headers={"Location": "https://www.bigbro.company/success"},
+            status=status.HTTP_302_FOUND,
         )

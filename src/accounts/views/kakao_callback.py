@@ -9,12 +9,13 @@ from core.authentication import CsrfExemptSessionAuthentication
 
 
 class KakaoLoginCallBackView(APIView):
-    authentication_classes = (CsrfExemptSessionAuthentication, )
+    authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = [AllowAny]
 
     kakao_login_callback_service = KakaoLoginCallbackService()
 
     def get(self, request: Request) -> Response:
-        return Response(headers={
-            'location': self.kakao_login_callback_service.login(request)
-        }, status=status.HTTP_302_FOUND)
+        return Response(
+            headers={"location": self.kakao_login_callback_service.login(request)},
+            status=status.HTTP_302_FOUND,
+        )

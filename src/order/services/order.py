@@ -8,42 +8,34 @@ from address.models import Address
 from order.enums import OrderStatus
 from order.exceptions import OrderNotFoundException
 from order.models import Order, OrderItem
-from order.serializers import OrderWriteSerializer, OrderPatchSerializer, OrderDeliveryNumberPatchSerializer, \
-    OrderStatusPatchSerializer
+from order.serializers import (
+    OrderWriteSerializer,
+    OrderPatchSerializer,
+    OrderDeliveryNumberPatchSerializer,
+    OrderStatusPatchSerializer,
+)
 from product.models import Product, ProductOption
 
 
 class OrderService:
-    def __init__(
-            self,
-            order: Order = Order,
-            address: Address = Address,
-            product: Product = Product,
-            product_option: ProductOption = ProductOption,
-            order_item: OrderItem = OrderItem
-    ):
-        self.order = order
-        self.address = address
-        self.product = product
-        self.product_option = product_option
-        self.order_item = order_item
-
     def get_my_order_by_id(self, user, order_id):
-        order = self.order.objects.filter(user=user, id=order_id).prefetch_related('order_item')
+        order = Order.objects.filter(user=user, id=order_id).prefetch_related(
+            "order_item"
+        )
         if not order:
             raise OrderNotFoundException()
 
     def get_my_order_list(self, user):
-        return self.order.objects.filter(user=user).prefetch_related('order_item')
+        return Order.objects.filter(user=user).prefetch_related("order_item")
 
     def get_all_order_list(self):
-        return self.order.objects.filter(
+        return Order.objects.filter(
             ~Q(status=OrderStatus.STAGING)
-        ).prefetch_related('order_item')
+        ).prefetch_related("order_item")
 
     @transaction.atomic
     def create(self, user, serializer: OrderWriteSerializer):
-        products = serializer.validated_data.pop('products')
+        products = serializer.validated_data.pop("products")
         total_price = 0
 
         # Create order
@@ -55,11 +47,15 @@ class OrderService:
         order_items = []
         for _product in products:
             # Product, Option 조회
-            product = get_object_or_404(Product, id=_product['product'])
-            option = get_object_or_404(ProductOption, name=_product['option'], product=product)
+            product = get_object_or_404(Product, id=_product["product"])
+            option = get_object_or_404(
+                ProductOption, name=_product["option"], product=product
+            )
 
             # order.total_price 계산
-            total_price += (product.price - int(product.price * product.discount / 100)) * _product['quantity']
+            total_price += (
+                product.price - int(product.price * product.discount / 100)
+            ) * _product["quantity"]
 
             # order item 추가
             order_items.append(
@@ -67,12 +63,12 @@ class OrderService:
                     product=product,
                     product_option=option,
                     order=order,
-                    quantity=_product['quantity'],
+                    quantity=_product["quantity"],
                     price=product.price,  # 추후 item에 가격 변동시 조정 필요
                 )
             )
 
-        self.order_item.objects.bulk_create(order_items)
+        OrderItem.objects.bulk_create(order_items)
 
         delivery_cost = order.delivery_cost if total_price < 50000 else 0
 
@@ -83,25 +79,29 @@ class OrderService:
     @transaction.atomic
     def patch(self, user, serializer: OrderPatchSerializer, order_id: UUID):
         order = get_object_or_404(Order, id=order_id, user=user)
-        address = get_object_or_404(Address, id=serializer.validated_data.get('address'), user=user)
+        address = get_object_or_404(
+            Address, id=serializer.validated_data.get("address"), user=user
+        )
 
         order.name = address.name
         order.zipcode = address.zipcode
         order.address = address.address
         order.address_detail = address.detail
         order.phone = address.phone
-        order.request = serializer.validated_data.get('request')
+        order.request = serializer.validated_data.get("request")
 
         order.save()
 
     @transaction.atomic
-    def patch_delivery_info(self, order_id: UUID, serializer: OrderDeliveryNumberPatchSerializer):
+    def patch_delivery_info(
+        self, order_id: UUID, serializer: OrderDeliveryNumberPatchSerializer
+    ):
         order = get_object_or_404(Order, id=order_id)
-        order.tracking_number = serializer.validated_data.get('tracking_number')
+        order.tracking_number = serializer.validated_data.get("tracking_number")
         order.save()
 
     @transaction.atomic
     def patch_status(self, order_id: UUID, serializer: OrderStatusPatchSerializer):
         order = get_object_or_404(Order, id=order_id)
-        order.status = serializer.validated_data.get('status')
+        order.status = serializer.validated_data.get("status")
         order.save()
