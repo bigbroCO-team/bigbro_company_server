@@ -18,10 +18,16 @@ class Address(BaseModel):
     class Meta:
         db_table = "address"
 
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
+
     def clean(self):
         if self.default:
-            address_default_count = (
-                Address.objects.filter(user=self.user).values("default").exists()
-            )
-            if address_default_count:
+            address_default = Address.objects.filter(
+                user=self.user,
+                default=True,
+            ).exclude(id=self.id).exists()
+
+            if address_default:
                 raise AddressTooManyDefaultFieldException()
