@@ -50,9 +50,15 @@ class AddressViewSet(ViewSet):
 
     @action(url_path="default", methods=["get"], detail=False)
     def get_default(self, request: Request) -> Response:
-        pass
+        address = get_object_or_404(Address, user=request.user, default=True)
+        serializer = self.serializer_class(address)
+        return Response(serializer.data)
 
-    @action(url_path="default/<int:pk>", methods=["post"], detail=False)
+    @action(url_path="default/(?P<pk>\d+)", methods=["post"], detail=False)
     @transaction.atomic
     def set_default(self, request: Request, pk: int) -> Response:
-        pass
+        address = get_object_or_404(Address, id=pk, user=request.user)
+        Address.objects.filter(user=request.user, default=True).update(default=False)
+        address.default = True
+        address.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
