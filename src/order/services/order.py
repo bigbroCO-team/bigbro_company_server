@@ -29,9 +29,9 @@ class OrderService:
         return Order.objects.filter(user=user).prefetch_related("order_item")
 
     def get_all_order_list(self):
-        return Order.objects.filter(
-            ~Q(status=OrderStatus.STAGING)
-        ).prefetch_related("order_item")
+        return Order.objects.filter(~Q(status=OrderStatus.STAGING)).prefetch_related(
+            "order_item"
+        )
 
     @transaction.atomic
     def create(self, user, serializer: OrderWriteSerializer):

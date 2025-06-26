@@ -14,9 +14,9 @@ class ProductService:
                 brand=brand_name, status=ProductStatus.ON
             ).prefetch_related("image", "option")
         else:
-            return Product.objects.filter(
-                status=ProductStatus.ON
-            ).prefetch_related("image", "option")
+            return Product.objects.filter(status=ProductStatus.ON).prefetch_related(
+                "image", "option"
+            )
 
     def get_all_product_list(self, brand_name: str = None):
         if brand_name:
