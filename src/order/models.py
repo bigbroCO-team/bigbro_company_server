@@ -26,12 +26,11 @@ class Order(BaseModel):
 
     # 배송지 정보
     name = models.CharField(max_length=17)  # 수령인 이름
-    phone = models.CharField(max_length=11)  # 수령인 연락처
+    phone = models.CharField(max_length=11, null=True)  # 연락처
     zipcode = models.CharField(max_length=10, null=True)  # 우편번호
     address = models.TextField(null=True)  # 주소지
     address_detail = models.CharField(max_length=50, null=True)  # 상세 주소
     request = models.TextField(null=True)  # 배송 요청사항
-    phone = models.CharField(max_length=11, null=True)  # 연락처
 
     # 주문 상태
     status = models.CharField(
@@ -43,9 +42,6 @@ class Order(BaseModel):
 
     class Meta:
         db_table = "order"
-
-    def __str__(self):
-        return self.user.username
 
 
 class OrderItem(BaseModel):

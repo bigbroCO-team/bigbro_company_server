@@ -3,14 +3,31 @@ from django.conf import settings
 from django.db.models import Sum
 from rest_framework import serializers
 
+from address.models import Address
 from product.serializers import ProductReadSerializer
 from .enums import OrderStatus
 from .models import Order, OrderItem
 
 
-class OrderPatchSerializer(serializers.Serializer):
-    address = serializers.CharField()
-    request = serializers.CharField()
+class OrderUpdateSerializer(serializers.Serializer):
+    address = serializers.PrimaryKeyRelatedField(
+        queryset=Address.objects.all(),
+    )
+    request = serializers.CharField(required=False)
+
+    def update(self, instance, validated_data):
+        address = validated_data.get("address")
+        request = validated_data.get("request")
+
+        instance.name = address.name
+        instance.zipcode = address.zipcode
+        instance.address = address.address
+        instance.address_detail = address.detail
+        instance.phone = address.phone
+        instance.request = request
+
+        instance.save()
+        return instance
 
 
 class OrderItemWriteSerializer(serializers.Serializer):
@@ -68,11 +85,8 @@ class OrderReadSerializer(serializers.ModelSerializer):
         )
 
     def get_delivery_status(self, obj):
-        if not obj.tracking_number:
-            return None
-
         response = requests.get(
-            f"{settings.DELIVERY_TRAKER_API}/carriers/kr.logen/tracks/{obj.tracking_number}",
+            f"{settings.DELIVERY_TRAKER_API}/carriers/kr.logen/tracks/{obj.tracking_number or ""}",
         )
 
         if response.status_code == 200:
