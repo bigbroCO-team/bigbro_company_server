@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import QuerySet
 
 from core.basemodel import BaseModel
 from product.enums import ProductBrand, ProductStatus
@@ -12,11 +13,23 @@ class Product(BaseModel):
     discount = models.FloatField()
     status = models.CharField(choices=ProductStatus.choices, max_length=5)
 
+    image: "QuerySet[ProductImage]"
+    option: "QuerySet[ProductOption]"
+
     class Meta:
         db_table = "product"
 
-    def __str__(self):
-        return self.name
+    def update_option(self, option):
+        self.option.all().delete()
+        ProductOption.objects.bulk_create(
+            [ProductOption(product=self, name=name) for name in option],
+        )
+
+    def update_image(self, image):
+        self.image.all().delete()
+        ProductImage.objects.bulk_create(
+            [ProductImage(product=self, url=url) for url in image],
+        )
 
 
 class ProductImage(BaseModel):
@@ -25,9 +38,6 @@ class ProductImage(BaseModel):
 
     class Meta:
         db_table = "product_image"
-
-    def __str__(self):
-        return self.product.name
 
 
 class ProductOption(BaseModel):
@@ -38,6 +48,3 @@ class ProductOption(BaseModel):
 
     class Meta:
         db_table = "product_option"
-
-    def __str__(self):
-        return self.product.name
