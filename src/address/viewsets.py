@@ -54,7 +54,7 @@ class AddressViewSet(ViewSet):
         serializer = self.serializer_class(address)
         return Response(serializer.data)
 
-    @action(url_path="default/(?P<pk>\d+)", methods=["post"], detail=False)
+    @action(url_path=r"default/(?P<pk>\d+)", methods=["post"], detail=False)
     @transaction.atomic
     def set_default(self, request: Request, pk: int) -> Response:
         address = get_object_or_404(Address, id=pk, user=request.user)

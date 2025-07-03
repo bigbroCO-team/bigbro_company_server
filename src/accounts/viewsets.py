@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import logout, login
 from django.db import transaction
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.decorators import action
@@ -36,7 +37,7 @@ class AccountViewSet(ViewSet):
         detail=False,
         permission_classes=(AllowAny,),
     )
-    def kakao_login(self, request: Request) -> redirect:
+    def kakao_login(self, request: Request) -> HttpResponseRedirect:
         return redirect(
             f"https://kauth.kakao.com/oauth/authorize"
             f"?response_type=code"
@@ -51,7 +52,7 @@ class AccountViewSet(ViewSet):
         permission_classes=(AllowAny,),
     )
     @transaction.atomic
-    def kakao_callback(self, request: Request) -> redirect:
+    def kakao_callback(self, request: Request) -> HttpResponseRedirect:
         user = kakao_login(request.GET.get("code"))
         login(request, user)
         return redirect(settings.KAKAO_CLIENT_REDIRECT_URL)
