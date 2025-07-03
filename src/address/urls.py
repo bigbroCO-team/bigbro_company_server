@@ -1,11 +1,8 @@
-from django.urls import path
+from rest_framework.routers import DefaultRouter
 
-from address.views.address import AddressView, AddressDetailView
-from address.views.default import DefaultAddressView
+from address.viewsets import AddressViewSet
 
-urlpatterns = [
-    path('', AddressView.as_view()),
-    path('/<int:address_id>', AddressDetailView.as_view()),
-    path('/default', DefaultAddressView.as_view()),
-    path('/default/<int:address_id>', DefaultAddressView.as_view()),
-]
+
+address_router = DefaultRouter(trailing_slash=False)
+
+address_router.register("address", AddressViewSet, basename="address")

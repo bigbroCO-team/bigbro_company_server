@@ -1,12 +1,17 @@
 from django.contrib import admin
 from django.urls import path, include
 
+from address.urls import address_router
+from accounts.urls import account_router
+from cart.urls import cart_router
+from order.urls import order_router
+from product.urls import product_router
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('account', include('accounts.urls'), name='account'),
-    path('address', include('address.urls'), name='address'),
-    path('product', include('product.urls'), name='product'),
-    path('cart', include('cart.urls'), name='cart'),
-    path('order', include('order.urls'), name='order'),
+    path("admin/", admin.site.urls),
+    path("", include(address_router.urls)),
+    path("", include(account_router.urls)),
+    path("", include(cart_router.urls)),
+    path("", include(order_router.urls)),
+    path("", include(product_router.urls)),
 ]

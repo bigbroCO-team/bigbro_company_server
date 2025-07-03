@@ -6,7 +6,7 @@ from core.basemodel import BaseModel
 
 
 class Address(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='address')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="address")
     name = models.CharField(max_length=17)
     phone = models.CharField(max_length=11)
     tag = models.CharField(max_length=20)
@@ -16,10 +16,22 @@ class Address(BaseModel):
     default = models.BooleanField(default=False)
 
     class Meta:
-        db_table = 'address'
+        db_table = "address"
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
     def clean(self):
         if self.default:
-            address_default_count = Address.objects.filter(user=self.user).values('default').exists()
-            if address_default_count:
+            address_default = (
+                Address.objects.filter(
+                    user=self.user,
+                    default=True,
+                )
+                .exclude(id=self.id)
+                .exists()
+            )
+
+            if address_default:
                 raise AddressTooManyDefaultFieldException()

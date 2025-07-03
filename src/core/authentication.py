@@ -8,7 +8,7 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
         return
 
 
-class IsStaffOrReadOnly(BasePermission):
+class IsAdminOrReadOnly(BasePermission):
 
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS:

@@ -7,23 +7,36 @@ from .models import Product, ProductOption, ProductImage
 class ProductOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductOption
-        fields = ('id', 'name')
+        fields = ("id", "name")
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
-        fields = ('id', 'url')
+        fields = ("id", "url")
 
 
 class ProductReadSerializer(serializers.ModelSerializer):
     options = serializers.SerializerMethodField(read_only=True)
     images = serializers.SerializerMethodField(read_only=True)
-    created = serializers.DateTimeField(read_only=True, source='created_at', format='%Y-%m-%d')
+    created = serializers.DateTimeField(
+        read_only=True, source="created_at", format="%Y-%m-%d"
+    )
 
     class Meta:
         model = Product
-        fields = ('id', 'brand', 'name', 'description', 'price', 'discount', 'status', 'created', 'options', 'images')
+        fields = (
+            "id",
+            "brand",
+            "name",
+            "description",
+            "price",
+            "discount",
+            "status",
+            "created",
+            "options",
+            "images",
+        )
 
     def get_options(self, obj):
         return [o.name for o in obj.option.all()]
@@ -36,12 +49,18 @@ class ProductWriteSerializer(serializers.ModelSerializer):
     option = serializers.ListField(write_only=True)
     image = serializers.ListField(write_only=True)
     discount = serializers.IntegerField(
-        validators=[
-            MinValueValidator(0),
-            MaxValueValidator(100)
-        ]
+        validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
 
     class Meta:
         model = Product
-        fields = ('brand', 'name', 'description', 'price', 'discount', 'status', 'option', 'image')
+        fields = (
+            "brand",
+            "name",
+            "description",
+            "price",
+            "discount",
+            "status",
+            "option",
+            "image",
+        )

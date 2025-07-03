@@ -6,19 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('order', '0003_remove_orderitem_status_order_status'),
+        ("order", "0003_remove_orderitem_status_order_status"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='order',
-            name='name',
-            field=models.CharField(default='NULL', max_length=17),
+            model_name="order",
+            name="name",
+            field=models.CharField(default="NULL", max_length=17),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='order',
-            name='receipt_url',
+            model_name="order",
+            name="receipt_url",
             field=models.CharField(null=True),
         ),
     ]

@@ -1,19 +1,8 @@
+from rest_framework import status
 from rest_framework.exceptions import APIException
 
 
-class AddressNotFoundException(APIException):
-    status_code = 404
-    default_detail = 'Address Not Found'
-    default_code = 'address_not_found'
-
-
 class AddressTooManyDefaultFieldException(APIException):
-    status_code = 400
-    default_detail = 'Address Can Have Only 1 Default Field'
-    default_code = 'address_can_have_only_one_default_field'
-
-
-class DefaultAddressIsNotDeleteAble(APIException):
-    status_code = 400
-    default_detail = 'Default Address Is Not Deleteable'
-    default_code = 'default_address_is_not_deleteable'
+    status_code = status.HTTP_400_BAD_REQUEST
+    default_detail = "기본 배송지는 하나만 설정할 수 있습니다."
+    default_code = "too_many_default_field"

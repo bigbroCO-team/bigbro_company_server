@@ -9,8 +9,8 @@ class User(BaseModel, AbstractUser):
     username = models.CharField(null=True, max_length=30, unique=True, blank=True)
 
     class Meta:
-        db_table = 'user'
-        verbose_name = 'User'
+        db_table = "user"
+        verbose_name = "User"
 
     def __str__(self):
         return self.email
