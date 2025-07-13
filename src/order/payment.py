@@ -34,7 +34,7 @@ def process_payment(user: User, order_id: UUID, payment_key: str, amount: int):
 
 
 def _get_encrypted_pg_secret_key():
-    key_string = settings.TOSS_SECRET_KEY or "" + ":"
+    key_string = settings.TOSS_SECRET_KEY + ":"
     key = base64.b64encode(key_string.encode("utf-8")).decode("utf-8")
     return f"Basic {key}"
 
