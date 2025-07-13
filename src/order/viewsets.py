@@ -61,8 +61,8 @@ class OrderViewSet(ViewSet):
 
     # Staging Order에 Address field update
     @transaction.atomic
-    def partial_update(self, request: Request, order_id: UUID) -> Response:
-        order = get_object_or_404(Order, id=order_id, user=request.user)
+    def partial_update(self, request: Request, pk: UUID) -> Response:
+        order = get_object_or_404(Order, id=pk, user=request.user)
         serializer = OrderUpdateSerializer(order, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
