@@ -18,7 +18,7 @@ def process_payment(user: User, order_id: UUID, payment_key: str, amount: int):
         ~Q(status=OrderStatus.STAGING),  # 주문 상태가 Staging이 아닌 경우
         id=order_id,
         user=user,
-        payment_key__isnull=True,  # 결제 키가 없는 주문만 처리
+        paymentkey__isnull=True,  # 결제 키가 없는 주문만 처리
         total_price=amount,  # 가격 검증
     )
 
