@@ -32,7 +32,7 @@ class ProductViewSet(ViewSet):
         product = get_object_or_404(
             Product.objects.prefetch_related("image", "option"), id=pk
         )
-        serializer = ProductWriteSerializer(product)
+        serializer = ProductReadSerializer(product)
         return Response(serializer.data)
 
     @transaction.atomic
