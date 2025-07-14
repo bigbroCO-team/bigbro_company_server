@@ -34,7 +34,7 @@ class Product(BaseModel):
 
 class ProductImage(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="image")
-    url = models.URLField()
+    url = models.URLField(max_length=500)
 
     class Meta:
         db_table = "product_image"
