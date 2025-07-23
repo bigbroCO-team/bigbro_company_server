@@ -6,37 +6,44 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
 from core.authentication import CsrfExemptSessionAuthentication, IsAdminOrReadOnly
+from core.cache.mixin import CoreCacheMixin
 from product.enums import ProductStatus
 from product.models import Product, ProductOption, ProductImage
 from product.serializers import ProductReadSerializer, ProductWriteSerializer
 
 
-class ProductViewSet(ViewSet):
+class ProductViewSet(ViewSet, CoreCacheMixin):
     authentication_classes = (CsrfExemptSessionAuthentication,)
     permission_classes = (IsAdminOrReadOnly,)
 
+    CACHE_KEY_PREFIX = "product"
+    CACHE_TTL = 60 * 5
+
     def list(self, request: Request) -> Response:
         brand = request.GET.get("brand")
-        queryset = Product.objects.all().prefetch_related("image", "option")
-        if brand:  # Brand filtering
-            queryset = queryset.filter(brand=brand)
-        products = (
-            queryset
-            if request.user.is_staff
-            else queryset.filter(status=ProductStatus.ON)
+        return Response(
+            self._cache_get_or_set(
+                key=f"list::{brand or 'all'}::{request.user.is_staff}",
+                value=lambda: ProductReadSerializer(
+                    self._get_product_list(brand, is_staff=request.user.is_staff),
+                    many=True,
+                ).data,
+            )
         )
-        serializer = ProductReadSerializer(products, many=True)
-        return Response(serializer.data)
 
     def retrieve(self, request: Request, pk: int) -> Response:
-        product = get_object_or_404(
-            Product.objects.prefetch_related("image", "option"), id=pk
+        return Response(
+            self._cache_get_or_set(
+                key=f"detail::{pk}::{request.user.is_staff}",
+                value=lambda: ProductReadSerializer(
+                    self._get_product_detail(pk, is_staff=request.user.is_staff)
+                ).data,
+            )
         )
-        serializer = ProductReadSerializer(product)
-        return Response(serializer.data)
 
     @transaction.atomic
     def create(self, request: Request) -> Response:
+        self._cache_destroy_prefix_wild()
         serializer = ProductWriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         option = serializer.validated_data.pop("option")
@@ -52,6 +59,7 @@ class ProductViewSet(ViewSet):
 
     @transaction.atomic
     def update(self, request: Request, pk: int) -> Response:
+        self._cache_destroy_prefix_wild()
         product = get_object_or_404(
             Product.objects.prefetch_related("option", "image"), id=pk
         )
@@ -64,5 +72,20 @@ class ProductViewSet(ViewSet):
 
     @transaction.atomic
     def destroy(self, request: Request, pk: int) -> Response:
+        self._cache_destroy_prefix_wild()
         get_object_or_404(Product, id=pk).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @staticmethod
+    def _get_product_list(brand: str, is_staff: bool):
+        queryset = Product.objects.all().prefetch_related("image", "option")
+        if brand:
+            queryset = queryset.filter(brand=brand)
+        return queryset if is_staff else queryset.filter(status=ProductStatus.ON)
+
+    @staticmethod
+    def _get_product_detail(pk: int, is_staff: bool):
+        queryset = Product.objects.prefetch_related("image", "option")
+        if not is_staff:
+            queryset = queryset.filter(status=ProductStatus.ON)
+        return get_object_or_404(queryset, id=pk)
