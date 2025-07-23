@@ -24,13 +24,6 @@ DATABASES = {
     }
 }
 
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": f"redis://{os.environ.get("REDIS_HOST")}:{os.environ.get("REDIS_PORT")}",
-    }
-}
-
 KAKAO_CLIENT_REDIRECT_URL = os.environ.get("KAKAO_CLIENT_REDIRECT_URL")
 KAKAO_REDIRECT_URI = os.environ.get("KAKAO_REDIRECT_URI")
 
