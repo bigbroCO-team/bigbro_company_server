@@ -79,7 +79,9 @@ class OrderViewSet(ViewSet):
             order_id=request.GET.get("orderId"),
             amount=request.GET.get("amount"),
         )
-        return redirect("http://ec2-43-200-135-102.ap-northeast-2.compute.amazonaws.com/success")
+        return redirect(
+            "http://ec2-43-200-135-102.ap-northeast-2.compute.amazonaws.com/success"
+        )
 
     # ===Admin API===
     # 모든 order 조회
